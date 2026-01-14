@@ -35,10 +35,6 @@
                 <span class="tab-icon">♪</span>
                 Tuner
             </button>
-            <button class="tab-btn" data-tab="notes">
-                <span class="tab-icon">📝</span>
-                Pieces
-            </button>
             <button class="tab-btn" data-tab="timer">
                 <span class="tab-icon">⏱</span>
                 Timer
@@ -54,49 +50,72 @@
             <!-- Metronome Tab -->
             <section id="metronome" class="tab-content active">
                 <div class="metronome-container">
-                    <div class="metronome-layout">
-                        <!-- Left side: Tempo markings and slider -->
-                        <div class="metronome-slider-section">
-                            <div class="tempo-markings">
-                                <div class="tempo-mark" data-bpm="208">Prestissimo</div>
-                                <div class="tempo-mark" data-bpm="184">Presto</div>
-                                <div class="tempo-mark" data-bpm="168">Vivace</div>
-                                <div class="tempo-mark" data-bpm="144">Allegro</div>
-                                <div class="tempo-mark" data-bpm="120">Moderato</div>
-                                <div class="tempo-mark" data-bpm="108">Andante</div>
-                                <div class="tempo-mark" data-bpm="76">Adagio</div>
-                                <div class="tempo-mark" data-bpm="60">Largo</div>
-                                <div class="tempo-mark" data-bpm="45">Larghetto</div>
-                                <div class="tempo-mark" data-bpm="40">Grave</div>
+                    <!-- Mobile-optimized layout: slider left, controls right -->
+                    <div class="metronome-main">
+                        <!-- Vertical slider with tempo markings -->
+                        <div class="slider-column">
+                            <div class="tempo-scale">
+                                <div class="scale-mark" data-bpm="208">
+                                    <span class="mark-label">Prestissimo</span>
+                                    <span class="mark-bpm">208</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="184">
+                                    <span class="mark-label">Presto</span>
+                                    <span class="mark-bpm">184</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="168">
+                                    <span class="mark-label">Vivace</span>
+                                    <span class="mark-bpm">168</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="144">
+                                    <span class="mark-label">Allegro</span>
+                                    <span class="mark-bpm">144</span>
+                                </div>
+                                <div class="scale-mark active" data-bpm="120">
+                                    <span class="mark-label">Moderato</span>
+                                    <span class="mark-bpm">120</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="108">
+                                    <span class="mark-label">Andante</span>
+                                    <span class="mark-bpm">108</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="76">
+                                    <span class="mark-label">Adagio</span>
+                                    <span class="mark-bpm">76</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="60">
+                                    <span class="mark-label">Largo</span>
+                                    <span class="mark-bpm">60</span>
+                                </div>
+                                <div class="scale-mark" data-bpm="40">
+                                    <span class="mark-label">Grave</span>
+                                    <span class="mark-bpm">40</span>
+                                </div>
                             </div>
 
-                            <div class="metronome-visual">
-                                <!-- Metronome body -->
-                                <div class="metronome-body">
-                                    <div class="metronome-slider-track">
-                                        <input type="range"
-                                               id="tempo-slider"
-                                               min="40"
-                                               max="208"
-                                               value="120"
-                                               step="1"
-                                               orient="vertical">
-                                        <div class="slider-thumb-visual" id="slider-thumb"></div>
-                                    </div>
-                                </div>
+                            <div class="slider-track-container">
+                                <input type="range"
+                                       id="tempo-slider"
+                                       min="40"
+                                       max="208"
+                                       value="120"
+                                       step="1"
+                                       orient="vertical"
+                                       aria-label="Tempo slider">
                             </div>
                         </div>
 
-                        <!-- Right side: Display and controls -->
-                        <div class="metronome-controls-section">
-                            <div class="tempo-display">
-                                <div class="bpm-value" id="bpm-display">120</div>
-                                <div class="tempo-marking" id="tempo-marking">Moderato</div>
+                        <!-- Controls column -->
+                        <div class="controls-column">
+                            <!-- Large BPM display -->
+                            <div class="bpm-display">
+                                <div class="bpm-number" id="bpm-display">120</div>
+                                <div class="bpm-label">BPM</div>
                             </div>
 
-                            <div class="time-signature">
-                                <label>Time Signature</label>
-                                <div class="signature-buttons">
+                            <!-- Time signature selector -->
+                            <div class="time-sig-section">
+                                <div class="sig-grid">
                                     <button class="sig-btn" data-beats="2">2/4</button>
                                     <button class="sig-btn" data-beats="3">3/4</button>
                                     <button class="sig-btn active" data-beats="4">4/4</button>
@@ -106,7 +125,8 @@
                                 </div>
                             </div>
 
-                            <div class="beat-indicator">
+                            <!-- Beat indicator -->
+                            <div class="beat-display">
                                 <div class="beat-dots" id="beat-dots">
                                     <div class="dot"></div>
                                     <div class="dot"></div>
@@ -115,6 +135,7 @@
                                 </div>
                             </div>
 
+                            <!-- Start/Stop button -->
                             <button class="control-btn" id="metronome-toggle">
                                 <span class="btn-text">Start</span>
                             </button>
@@ -162,27 +183,6 @@
                 </div>
             </section>
 
-            <!-- Pieces/Notes Tab -->
-            <section id="notes" class="tab-content">
-                <div class="notes-container">
-                    <div class="notes-header">
-                        <h2>My Repertoire</h2>
-                        <button class="add-btn" id="add-piece-btn">+ Add Piece</button>
-                    </div>
-
-                    <div id="pieces-list" class="pieces-list">
-                        <!-- Pieces will be dynamically added here -->
-                    </div>
-
-                    <!-- Empty state -->
-                    <div id="empty-state" class="empty-state">
-                        <div class="empty-icon">🎼</div>
-                        <p>No pieces yet</p>
-                        <p class="empty-hint">Add your first piece to start keeping rehearsal notes</p>
-                    </div>
-                </div>
-            </section>
-
             <!-- Timer Tab -->
             <section id="timer" class="tab-content">
                 <div class="timer-container">
@@ -207,118 +207,99 @@
             <!-- Transpose Tab -->
             <section id="transpose" class="tab-content">
                 <div class="transpose-container">
-                    <h2>Note Transposer</h2>
-                    <p class="transpose-description">Quickly translate notes from transposing instruments and different clefs to concert pitch</p>
+                    <h2>Transposer</h2>
 
-                    <div class="transpose-form">
-                        <div class="form-group">
-                            <label for="instrument-select">From Instrument/Clef</label>
-                            <select id="instrument-select" class="transpose-select">
-                                <optgroup label="Transposing Instruments">
-                                    <option value="C">Concert Pitch (C)</option>
-                                    <option value="Bb">B♭ Instruments (Clarinet, Trumpet, Tenor Sax)</option>
-                                    <option value="Eb">E♭ Instruments (Alto Sax, Bari Sax)</option>
-                                    <option value="F">F Instruments (French Horn)</option>
-                                    <option value="A">A Instruments (Clarinet in A)</option>
-                                    <option value="Db">D♭ Instruments (Piccolo Trumpet)</option>
-                                </optgroup>
-                                <optgroup label="Clefs">
-                                    <option value="bass">Bass Clef (8va lower)</option>
-                                    <option value="alto">Alto Clef</option>
-                                    <option value="tenor">Tenor Clef</option>
-                                </optgroup>
+                    <!-- Input controls -->
+                    <div class="transpose-controls">
+                        <div class="control-group">
+                            <label for="instrument-select">Instrument</label>
+                            <select id="instrument-select" class="select-control">
+                                <option value="C">Concert Pitch (C)</option>
+                                <option value="Bb">B♭ (Cl, Tpt, Ten Sax)</option>
+                                <option value="Eb">E♭ (Alto Sax, Bari Sax)</option>
+                                <option value="F">F (Horn)</option>
+                                <option value="A">A (Clarinet)</option>
+                                <option value="bass">Bass Clef</option>
+                                <option value="alto">Alto Clef</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="note-input">Written Note</label>
-                            <div class="note-input-group">
-                                <select id="note-input" class="transpose-select note-select">
-                                    <option value="C">C</option>
-                                    <option value="C#">C♯/D♭</option>
-                                    <option value="D">D</option>
-                                    <option value="D#">D♯/E♭</option>
-                                    <option value="E">E</option>
-                                    <option value="F">F</option>
-                                    <option value="F#">F♯/G♭</option>
-                                    <option value="G">G</option>
-                                    <option value="G#">G♯/A♭</option>
-                                    <option value="A">A</option>
-                                    <option value="A#">A♯/B♭</option>
-                                    <option value="B">B</option>
-                                </select>
-                                <select id="octave-input" class="transpose-select octave-select">
-                                    <option value="3">3</option>
-                                    <option value="4" selected>4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                </select>
-                            </div>
+                        <div class="control-group">
+                            <label for="note-input">Note</label>
+                            <select id="note-input" class="select-control">
+                                <option value="C">C</option>
+                                <option value="C#">C♯/D♭</option>
+                                <option value="D">D</option>
+                                <option value="D#">D♯/E♭</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F♯/G♭</option>
+                                <option value="G">G</option>
+                                <option value="G#">G♯/A♭</option>
+                                <option value="A">A</option>
+                                <option value="A#">A♯/B♭</option>
+                                <option value="B">B</option>
+                            </select>
                         </div>
 
-                        <div class="transpose-arrow">↓</div>
-
-                        <div class="result-section">
-                            <h3>Concert Pitch</h3>
-                            <div class="concert-pitch-display" id="concert-pitch-result">
-                                <div class="concert-note">C4</div>
-                            </div>
-                            <p class="result-explanation" id="result-explanation">This is what will actually sound</p>
+                        <div class="control-group">
+                            <label for="octave-input">Octave</label>
+                            <select id="octave-input" class="select-control">
+                                <option value="3">3</option>
+                                <option value="4" selected>4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <div class="transpose-examples">
-                            <h3>Quick Reference</h3>
-                            <div class="example-grid">
-                                <div class="example-item">
-                                    <strong>B♭ Clarinet plays C</strong>
-                                    <span>Sounds: B♭</span>
-                                </div>
-                                <div class="example-item">
-                                    <strong>F Horn plays C</strong>
-                                    <span>Sounds: F (below)</span>
-                                </div>
-                                <div class="example-item">
-                                    <strong>E♭ Alto Sax plays C</strong>
-                                    <span>Sounds: E♭</span>
-                                </div>
-                                <div class="example-item">
-                                    <strong>Bass Clef C4</strong>
-                                    <span>Treble: C3</span>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Written pitch staff -->
+                    <div class="staff-section">
+                        <h3 class="staff-title">Written Pitch</h3>
+                        <svg id="written-staff" class="staff-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Staff lines -->
+                            <line x1="20" y1="60" x2="380" y2="60" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="80" x2="380" y2="80" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="100" x2="380" y2="100" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="120" x2="380" y2="120" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="140" x2="380" y2="140" stroke="#d4af37" stroke-width="1.5"/>
+
+                            <!-- Clef (will be dynamically added) -->
+                            <g id="written-clef"></g>
+
+                            <!-- Note head (will be dynamically positioned) -->
+                            <g id="written-note"></g>
+                        </svg>
+                    </div>
+
+                    <!-- Arrow indicator -->
+                    <div class="transpose-indicator">
+                        <div class="arrow-down">↓</div>
+                        <p class="indicator-text" id="transpose-info">Sounds...</p>
+                    </div>
+
+                    <!-- Concert pitch staff -->
+                    <div class="staff-section concert">
+                        <h3 class="staff-title">Concert Pitch (Treble Clef)</h3>
+                        <svg id="concert-staff" class="staff-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Staff lines -->
+                            <line x1="20" y1="60" x2="380" y2="60" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="80" x2="380" y2="80" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="100" x2="380" y2="100" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="120" x2="380" y2="120" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="20" y1="140" x2="380" y2="140" stroke="#d4af37" stroke-width="1.5"/>
+
+                            <!-- Treble clef -->
+                            <g id="concert-clef"></g>
+
+                            <!-- Note head (will be dynamically positioned) -->
+                            <g id="concert-note"></g>
+                        </svg>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Modal for adding/editing pieces -->
-        <div id="piece-modal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="modal-title">Add New Piece</h2>
-                    <button class="close-btn" id="close-modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="piece-title">Title</label>
-                        <input type="text" id="piece-title" placeholder="Symphony No. 5">
-                    </div>
-                    <div class="form-group">
-                        <label for="piece-composer">Composer</label>
-                        <input type="text" id="piece-composer" placeholder="Beethoven">
-                    </div>
-                    <div class="form-group">
-                        <label for="piece-notes">Rehearsal Notes</label>
-                        <textarea id="piece-notes" rows="6" placeholder="Notes about tempos, sections to work on, dynamics, etc."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="control-btn secondary" id="cancel-modal">Cancel</button>
-                    <button class="control-btn" id="save-piece">Save</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="app.js"></script>
