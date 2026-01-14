@@ -136,8 +136,117 @@ header {
 
 /* Metronome */
 .metronome-container {
-    max-width: 500px;
+    max-width: 700px;
     margin: 0 auto;
+    padding: 1rem;
+}
+
+.metronome-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.metronome-slider-section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.tempo-markings {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
+    padding: 1rem 0;
+}
+
+.tempo-mark {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.tempo-mark:hover {
+    color: var(--accent);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.metronome-visual {
+    position: relative;
+}
+
+.metronome-body {
+    width: 80px;
+    height: 400px;
+    background: linear-gradient(180deg, var(--card-bg) 0%, var(--secondary) 100%);
+    border: 3px solid var(--border);
+    border-radius: 10px 10px 60px 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px var(--shadow);
+}
+
+.metronome-slider-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tempo-slider {
+    -webkit-appearance: slider-vertical;
+    writing-mode: bt-lr;
+    width: 8px;
+    height: 350px;
+    background: linear-gradient(180deg,
+        var(--accent) 0%,
+        var(--accent) 10%,
+        var(--card-bg) 10%,
+        var(--card-bg) 90%,
+        var(--accent) 90%,
+        var(--accent) 100%);
+    outline: none;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+#tempo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    border: 3px solid var(--primary);
+}
+
+#tempo-slider::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+}
+
+.metronome-controls-section {
+    flex: 1;
+    max-width: 350px;
 }
 
 .tempo-display {
@@ -161,82 +270,6 @@ header {
     color: var(--text-muted);
     margin-top: 0.5rem;
     font-style: italic;
-}
-
-.tempo-presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    justify-content: center;
-}
-
-.preset-btn {
-    padding: 0.5rem 1rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-}
-
-.preset-btn:hover {
-    background: var(--accent);
-    color: var(--primary);
-    transform: translateY(-2px);
-    border-color: var(--accent);
-}
-
-.tempo-slider-container {
-    margin-bottom: 2rem;
-}
-
-.tempo-slider-container label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-#tempo-slider {
-    width: 100%;
-    height: 6px;
-    -webkit-appearance: none;
-    appearance: none;
-    background: var(--card-bg);
-    outline: none;
-    border-radius: 3px;
-    margin-bottom: 0.5rem;
-}
-
-#tempo-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    background: var(--accent);
-    cursor: pointer;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
-}
-
-#tempo-slider::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
-    background: var(--accent);
-    cursor: pointer;
-    border-radius: 50%;
-    border: none;
-    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
-}
-
-.slider-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    color: var(--text-muted);
 }
 
 .time-signature {
@@ -657,65 +690,145 @@ header {
     border-color: var(--accent);
 }
 
-/* Beat Patterns */
-.patterns-container {
-    max-width: 700px;
+/* Transpose Tool */
+.transpose-container {
+    max-width: 600px;
     margin: 0 auto;
 }
 
-.patterns-container h2 {
+.transpose-container h2 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     font-weight: 300;
     text-align: center;
 }
 
-.patterns-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+.transpose-description {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
 }
 
-.pattern-card {
+.transpose-form {
     background: var(--card-bg);
     border: 2px solid var(--border);
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: all 0.3s ease;
+    border-radius: 20px;
+    padding: 2rem;
 }
 
-.pattern-card:hover {
+.transpose-select {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--secondary);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.transpose-select:focus {
+    outline: none;
     border-color: var(--accent);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px var(--shadow);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
-.pattern-card h3 {
+.transpose-select option {
+    background: var(--secondary);
+    color: var(--text);
+}
+
+.note-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.note-select {
+    flex: 2;
+}
+
+.octave-select {
+    flex: 1;
+}
+
+.transpose-arrow {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin: 1.5rem 0;
+}
+
+.result-section {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.result-section h3 {
     color: var(--accent);
     margin-bottom: 1rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
-.pattern-svg {
-    width: 100%;
-    max-width: 150px;
-    height: 150px;
-    color: var(--text);
-    margin-bottom: 0.5rem;
+.concert-pitch-display {
+    margin: 1rem 0;
 }
 
-.beat-label {
-    fill: var(--accent);
-    font-size: 10px;
-    font-weight: bold;
+.concert-note {
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
-.pattern-note {
+.result-explanation {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-style: italic;
-    margin-top: 0.5rem;
+}
+
+.transpose-examples {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.transpose-examples h3 {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.example-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.example-item {
+    background: var(--secondary);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.example-item strong {
+    color: var(--text);
+    font-size: 0.85rem;
+}
+
+.example-item span {
+    color: var(--accent);
+    font-size: 0.9rem;
 }
 
 /* Modal */
@@ -821,6 +934,20 @@ header {
 
 /* Responsive */
 @media (max-width: 600px) {
+    .metronome-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .metronome-slider-section {
+        order: 2;
+    }
+
+    .metronome-controls-section {
+        order: 1;
+        max-width: 100%;
+    }
+
     .tempo-display {
         padding: 1.5rem;
     }
@@ -833,13 +960,13 @@ header {
         font-size: 4rem;
     }
 
-    .patterns-grid {
-        grid-template-columns: 1fr;
-    }
-
     .tab-btn {
         font-size: 0.75rem;
         padding: 0.75rem 0.25rem;
+    }
+
+    .example-grid {
+        grid-template-columns: 1fr;
     }
 }
 

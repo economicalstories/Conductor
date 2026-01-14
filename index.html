@@ -43,9 +43,9 @@
                 <span class="tab-icon">⏱</span>
                 Timer
             </button>
-            <button class="tab-btn" data-tab="patterns">
-                <span class="tab-icon">✋</span>
-                Patterns
+            <button class="tab-btn" data-tab="transpose">
+                <span class="tab-icon">🎹</span>
+                Transpose
             </button>
         </nav>
 
@@ -54,56 +54,72 @@
             <!-- Metronome Tab -->
             <section id="metronome" class="tab-content active">
                 <div class="metronome-container">
-                    <div class="tempo-display">
-                        <div class="bpm-value" id="bpm-display">120</div>
-                        <div class="tempo-marking" id="tempo-marking">Moderato</div>
-                    </div>
+                    <div class="metronome-layout">
+                        <!-- Left side: Tempo markings and slider -->
+                        <div class="metronome-slider-section">
+                            <div class="tempo-markings">
+                                <div class="tempo-mark" data-bpm="208">Prestissimo</div>
+                                <div class="tempo-mark" data-bpm="184">Presto</div>
+                                <div class="tempo-mark" data-bpm="168">Vivace</div>
+                                <div class="tempo-mark" data-bpm="144">Allegro</div>
+                                <div class="tempo-mark" data-bpm="120">Moderato</div>
+                                <div class="tempo-mark" data-bpm="108">Andante</div>
+                                <div class="tempo-mark" data-bpm="76">Adagio</div>
+                                <div class="tempo-mark" data-bpm="60">Largo</div>
+                                <div class="tempo-mark" data-bpm="45">Larghetto</div>
+                                <div class="tempo-mark" data-bpm="40">Grave</div>
+                            </div>
 
-                    <div class="tempo-presets">
-                        <button class="preset-btn" data-bpm="40">Grave</button>
-                        <button class="preset-btn" data-bpm="60">Largo</button>
-                        <button class="preset-btn" data-bpm="76">Adagio</button>
-                        <button class="preset-btn" data-bpm="108">Andante</button>
-                        <button class="preset-btn" data-bpm="120">Moderato</button>
-                        <button class="preset-btn" data-bpm="144">Allegro</button>
-                        <button class="preset-btn" data-bpm="168">Vivace</button>
-                        <button class="preset-btn" data-bpm="184">Presto</button>
-                        <button class="preset-btn" data-bpm="200">Prestissimo</button>
-                    </div>
+                            <div class="metronome-visual">
+                                <!-- Metronome body -->
+                                <div class="metronome-body">
+                                    <div class="metronome-slider-track">
+                                        <input type="range"
+                                               id="tempo-slider"
+                                               min="40"
+                                               max="208"
+                                               value="120"
+                                               step="1"
+                                               orient="vertical">
+                                        <div class="slider-thumb-visual" id="slider-thumb"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="tempo-slider-container">
-                        <label for="tempo-slider">Tempo (BPM)</label>
-                        <input type="range" id="tempo-slider" min="40" max="208" value="120" step="1">
-                        <div class="slider-labels">
-                            <span>40</span>
-                            <span>208</span>
+                        <!-- Right side: Display and controls -->
+                        <div class="metronome-controls-section">
+                            <div class="tempo-display">
+                                <div class="bpm-value" id="bpm-display">120</div>
+                                <div class="tempo-marking" id="tempo-marking">Moderato</div>
+                            </div>
+
+                            <div class="time-signature">
+                                <label>Time Signature</label>
+                                <div class="signature-buttons">
+                                    <button class="sig-btn" data-beats="2">2/4</button>
+                                    <button class="sig-btn" data-beats="3">3/4</button>
+                                    <button class="sig-btn active" data-beats="4">4/4</button>
+                                    <button class="sig-btn" data-beats="5">5/4</button>
+                                    <button class="sig-btn" data-beats="6">6/8</button>
+                                    <button class="sig-btn" data-beats="7">7/8</button>
+                                </div>
+                            </div>
+
+                            <div class="beat-indicator">
+                                <div class="beat-dots" id="beat-dots">
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                            </div>
+
+                            <button class="control-btn" id="metronome-toggle">
+                                <span class="btn-text">Start</span>
+                            </button>
                         </div>
                     </div>
-
-                    <div class="time-signature">
-                        <label>Time Signature</label>
-                        <div class="signature-buttons">
-                            <button class="sig-btn active" data-beats="2">2/4</button>
-                            <button class="sig-btn" data-beats="3">3/4</button>
-                            <button class="sig-btn" data-beats="4">4/4</button>
-                            <button class="sig-btn" data-beats="5">5/4</button>
-                            <button class="sig-btn" data-beats="6">6/8</button>
-                            <button class="sig-btn" data-beats="7">7/8</button>
-                        </div>
-                    </div>
-
-                    <div class="beat-indicator">
-                        <div class="beat-dots" id="beat-dots">
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                            <div class="dot"></div>
-                        </div>
-                    </div>
-
-                    <button class="control-btn" id="metronome-toggle">
-                        <span class="btn-text">Start</span>
-                    </button>
                 </div>
             </section>
 
@@ -188,58 +204,88 @@
                 </div>
             </section>
 
-            <!-- Beat Patterns Tab -->
-            <section id="patterns" class="tab-content">
-                <div class="patterns-container">
-                    <h2>Beat Patterns Reference</h2>
-                    <div class="patterns-grid">
-                        <div class="pattern-card">
-                            <h3>2/4 or 2/2</h3>
-                            <svg class="pattern-svg" viewBox="0 0 100 100">
-                                <path d="M50 10 L50 90 M50 10 L20 50" stroke="currentColor" stroke-width="2"
-                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
-                                <text x="55" y="15" class="beat-label">1</text>
-                                <text x="15" y="55" class="beat-label">2</text>
-                            </svg>
+            <!-- Transpose Tab -->
+            <section id="transpose" class="tab-content">
+                <div class="transpose-container">
+                    <h2>Note Transposer</h2>
+                    <p class="transpose-description">Quickly translate notes from transposing instruments and different clefs to concert pitch</p>
+
+                    <div class="transpose-form">
+                        <div class="form-group">
+                            <label for="instrument-select">From Instrument/Clef</label>
+                            <select id="instrument-select" class="transpose-select">
+                                <optgroup label="Transposing Instruments">
+                                    <option value="C">Concert Pitch (C)</option>
+                                    <option value="Bb">B♭ Instruments (Clarinet, Trumpet, Tenor Sax)</option>
+                                    <option value="Eb">E♭ Instruments (Alto Sax, Bari Sax)</option>
+                                    <option value="F">F Instruments (French Horn)</option>
+                                    <option value="A">A Instruments (Clarinet in A)</option>
+                                    <option value="Db">D♭ Instruments (Piccolo Trumpet)</option>
+                                </optgroup>
+                                <optgroup label="Clefs">
+                                    <option value="bass">Bass Clef (8va lower)</option>
+                                    <option value="alto">Alto Clef</option>
+                                    <option value="tenor">Tenor Clef</option>
+                                </optgroup>
+                            </select>
                         </div>
 
-                        <div class="pattern-card">
-                            <h3>3/4 or 3/8</h3>
-                            <svg class="pattern-svg" viewBox="0 0 100 100">
-                                <path d="M50 10 L50 90 M50 10 L20 50 M50 50 L80 50" stroke="currentColor"
-                                      stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
-                                <text x="55" y="15" class="beat-label">1</text>
-                                <text x="15" y="55" class="beat-label">2</text>
-                                <text x="85" y="55" class="beat-label">3</text>
-                            </svg>
+                        <div class="form-group">
+                            <label for="note-input">Written Note</label>
+                            <div class="note-input-group">
+                                <select id="note-input" class="transpose-select note-select">
+                                    <option value="C">C</option>
+                                    <option value="C#">C♯/D♭</option>
+                                    <option value="D">D</option>
+                                    <option value="D#">D♯/E♭</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="F#">F♯/G♭</option>
+                                    <option value="G">G</option>
+                                    <option value="G#">G♯/A♭</option>
+                                    <option value="A">A</option>
+                                    <option value="A#">A♯/B♭</option>
+                                    <option value="B">B</option>
+                                </select>
+                                <select id="octave-input" class="transpose-select octave-select">
+                                    <option value="3">3</option>
+                                    <option value="4" selected>4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="pattern-card">
-                            <h3>4/4</h3>
-                            <svg class="pattern-svg" viewBox="0 0 100 100">
-                                <path d="M50 10 L50 90 M50 10 L20 50 M50 50 L80 50 M50 50 L50 20"
-                                      stroke="currentColor" stroke-width="2" fill="none"
-                                      stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
-                                <text x="55" y="15" class="beat-label">1</text>
-                                <text x="15" y="55" class="beat-label">2</text>
-                                <text x="85" y="55" class="beat-label">3</text>
-                                <text x="55" y="25" class="beat-label">4</text>
-                            </svg>
+                        <div class="transpose-arrow">↓</div>
+
+                        <div class="result-section">
+                            <h3>Concert Pitch</h3>
+                            <div class="concert-pitch-display" id="concert-pitch-result">
+                                <div class="concert-note">C4</div>
+                            </div>
+                            <p class="result-explanation" id="result-explanation">This is what will actually sound</p>
                         </div>
 
-                        <div class="pattern-card">
-                            <h3>6/8</h3>
-                            <svg class="pattern-svg" viewBox="0 0 100 100">
-                                <path d="M50 10 L50 90 M50 10 L80 50" stroke="currentColor" stroke-width="2"
-                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
-                                <text x="55" y="15" class="beat-label">1</text>
-                                <text x="85" y="55" class="beat-label">2</text>
-                            </svg>
-                            <p class="pattern-note">Two main beats</p>
+                        <div class="transpose-examples">
+                            <h3>Quick Reference</h3>
+                            <div class="example-grid">
+                                <div class="example-item">
+                                    <strong>B♭ Clarinet plays C</strong>
+                                    <span>Sounds: B♭</span>
+                                </div>
+                                <div class="example-item">
+                                    <strong>F Horn plays C</strong>
+                                    <span>Sounds: F (below)</span>
+                                </div>
+                                <div class="example-item">
+                                    <strong>E♭ Alto Sax plays C</strong>
+                                    <span>Sounds: E♭</span>
+                                </div>
+                                <div class="example-item">
+                                    <strong>Bass Clef C4</strong>
+                                    <span>Treble: C3</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
