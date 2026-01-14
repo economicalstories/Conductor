@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your essential companion for conducting - metronome, tuner, and rehearsal tools">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Conductor's Companion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <path d="M16 4 L16 28 M8 12 L16 4 L24 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <h1>Conductor's Companion</h1>
+                </div>
+                <p class="tagline">Your orchestral toolkit</p>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="metronome">
+                <span class="tab-icon">♩</span>
+                Metronome
+            </button>
+            <button class="tab-btn" data-tab="tuner">
+                <span class="tab-icon">♪</span>
+                Tuner
+            </button>
+            <button class="tab-btn" data-tab="notes">
+                <span class="tab-icon">📝</span>
+                Pieces
+            </button>
+            <button class="tab-btn" data-tab="timer">
+                <span class="tab-icon">⏱</span>
+                Timer
+            </button>
+            <button class="tab-btn" data-tab="patterns">
+                <span class="tab-icon">✋</span>
+                Patterns
+            </button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content">
+            <!-- Metronome Tab -->
+            <section id="metronome" class="tab-content active">
+                <div class="metronome-container">
+                    <div class="tempo-display">
+                        <div class="bpm-value" id="bpm-display">120</div>
+                        <div class="tempo-marking" id="tempo-marking">Moderato</div>
+                    </div>
+
+                    <div class="tempo-presets">
+                        <button class="preset-btn" data-bpm="40">Grave</button>
+                        <button class="preset-btn" data-bpm="60">Largo</button>
+                        <button class="preset-btn" data-bpm="76">Adagio</button>
+                        <button class="preset-btn" data-bpm="108">Andante</button>
+                        <button class="preset-btn" data-bpm="120">Moderato</button>
+                        <button class="preset-btn" data-bpm="144">Allegro</button>
+                        <button class="preset-btn" data-bpm="168">Vivace</button>
+                        <button class="preset-btn" data-bpm="184">Presto</button>
+                        <button class="preset-btn" data-bpm="200">Prestissimo</button>
+                    </div>
+
+                    <div class="tempo-slider-container">
+                        <label for="tempo-slider">Tempo (BPM)</label>
+                        <input type="range" id="tempo-slider" min="40" max="208" value="120" step="1">
+                        <div class="slider-labels">
+                            <span>40</span>
+                            <span>208</span>
+                        </div>
+                    </div>
+
+                    <div class="time-signature">
+                        <label>Time Signature</label>
+                        <div class="signature-buttons">
+                            <button class="sig-btn active" data-beats="2">2/4</button>
+                            <button class="sig-btn" data-beats="3">3/4</button>
+                            <button class="sig-btn" data-beats="4">4/4</button>
+                            <button class="sig-btn" data-beats="5">5/4</button>
+                            <button class="sig-btn" data-beats="6">6/8</button>
+                            <button class="sig-btn" data-beats="7">7/8</button>
+                        </div>
+                    </div>
+
+                    <div class="beat-indicator">
+                        <div class="beat-dots" id="beat-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+
+                    <button class="control-btn" id="metronome-toggle">
+                        <span class="btn-text">Start</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Tuner Tab -->
+            <section id="tuner" class="tab-content">
+                <div class="tuner-container">
+                    <div class="tuner-visual">
+                        <svg width="200" height="200" viewBox="0 0 200 200" class="tuning-fork">
+                            <path d="M85 50 L85 120 M115 50 L115 120 M85 50 L115 50 M100 120 L100 150"
+                                  stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor"
+                                    stroke-width="2" opacity="0.3" class="tuner-pulse"/>
+                        </svg>
+                    </div>
+
+                    <div class="tuner-info">
+                        <h2>Concert A</h2>
+                        <div class="frequency-display">
+                            <span class="frequency-value" id="frequency-display">440</span>
+                            <span class="frequency-unit">Hz</span>
+                        </div>
+                        <p class="tuner-description">Oboe timbre</p>
+                    </div>
+
+                    <div class="frequency-adjust">
+                        <button class="freq-btn" id="freq-down">−</button>
+                        <input type="range" id="frequency-slider" min="415" max="466" value="440" step="1">
+                        <button class="freq-btn" id="freq-up">+</button>
+                    </div>
+
+                    <div class="tuner-presets">
+                        <button class="tuner-preset-btn" data-freq="440">A440 (Modern)</button>
+                        <button class="tuner-preset-btn" data-freq="442">A442 (European)</button>
+                        <button class="tuner-preset-btn" data-freq="415">A415 (Baroque)</button>
+                    </div>
+
+                    <button class="control-btn" id="tuner-toggle">
+                        <span class="btn-text">Play A</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Pieces/Notes Tab -->
+            <section id="notes" class="tab-content">
+                <div class="notes-container">
+                    <div class="notes-header">
+                        <h2>My Repertoire</h2>
+                        <button class="add-btn" id="add-piece-btn">+ Add Piece</button>
+                    </div>
+
+                    <div id="pieces-list" class="pieces-list">
+                        <!-- Pieces will be dynamically added here -->
+                    </div>
+
+                    <!-- Empty state -->
+                    <div id="empty-state" class="empty-state">
+                        <div class="empty-icon">🎼</div>
+                        <p>No pieces yet</p>
+                        <p class="empty-hint">Add your first piece to start keeping rehearsal notes</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Timer Tab -->
+            <section id="timer" class="tab-content">
+                <div class="timer-container">
+                    <h2>Rehearsal Timer</h2>
+                    <div class="timer-display" id="timer-display">00:00</div>
+                    <div class="timer-controls">
+                        <button class="control-btn" id="timer-start">Start</button>
+                        <button class="control-btn secondary" id="timer-reset">Reset</button>
+                    </div>
+                    <div class="timer-presets">
+                        <h3>Quick Timers</h3>
+                        <div class="preset-timers">
+                            <button class="timer-preset-btn" data-minutes="5">5 min</button>
+                            <button class="timer-preset-btn" data-minutes="10">10 min</button>
+                            <button class="timer-preset-btn" data-minutes="15">15 min</button>
+                            <button class="timer-preset-btn" data-minutes="30">30 min</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Beat Patterns Tab -->
+            <section id="patterns" class="tab-content">
+                <div class="patterns-container">
+                    <h2>Beat Patterns Reference</h2>
+                    <div class="patterns-grid">
+                        <div class="pattern-card">
+                            <h3>2/4 or 2/2</h3>
+                            <svg class="pattern-svg" viewBox="0 0 100 100">
+                                <path d="M50 10 L50 90 M50 10 L20 50" stroke="currentColor" stroke-width="2"
+                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
+                                <text x="55" y="15" class="beat-label">1</text>
+                                <text x="15" y="55" class="beat-label">2</text>
+                            </svg>
+                        </div>
+
+                        <div class="pattern-card">
+                            <h3>3/4 or 3/8</h3>
+                            <svg class="pattern-svg" viewBox="0 0 100 100">
+                                <path d="M50 10 L50 90 M50 10 L20 50 M50 50 L80 50" stroke="currentColor"
+                                      stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
+                                <text x="55" y="15" class="beat-label">1</text>
+                                <text x="15" y="55" class="beat-label">2</text>
+                                <text x="85" y="55" class="beat-label">3</text>
+                            </svg>
+                        </div>
+
+                        <div class="pattern-card">
+                            <h3>4/4</h3>
+                            <svg class="pattern-svg" viewBox="0 0 100 100">
+                                <path d="M50 10 L50 90 M50 10 L20 50 M50 50 L80 50 M50 50 L50 20"
+                                      stroke="currentColor" stroke-width="2" fill="none"
+                                      stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
+                                <text x="55" y="15" class="beat-label">1</text>
+                                <text x="15" y="55" class="beat-label">2</text>
+                                <text x="85" y="55" class="beat-label">3</text>
+                                <text x="55" y="25" class="beat-label">4</text>
+                            </svg>
+                        </div>
+
+                        <div class="pattern-card">
+                            <h3>6/8</h3>
+                            <svg class="pattern-svg" viewBox="0 0 100 100">
+                                <path d="M50 10 L50 90 M50 10 L80 50" stroke="currentColor" stroke-width="2"
+                                      fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="50" cy="10" r="4" fill="currentColor"/>
+                                <text x="55" y="15" class="beat-label">1</text>
+                                <text x="85" y="55" class="beat-label">2</text>
+                            </svg>
+                            <p class="pattern-note">Two main beats</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal for adding/editing pieces -->
+        <div id="piece-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">Add New Piece</h2>
+                    <button class="close-btn" id="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="piece-title">Title</label>
+                        <input type="text" id="piece-title" placeholder="Symphony No. 5">
+                    </div>
+                    <div class="form-group">
+                        <label for="piece-composer">Composer</label>
+                        <input type="text" id="piece-composer" placeholder="Beethoven">
+                    </div>
+                    <div class="form-group">
+                        <label for="piece-notes">Rehearsal Notes</label>
+                        <textarea id="piece-notes" rows="6" placeholder="Notes about tempos, sections to work on, dynamics, etc."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="control-btn secondary" id="cancel-modal">Cancel</button>
+                    <button class="control-btn" id="save-piece">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
