@@ -1,0 +1,8 @@
+{
+  "name": "conductors-companion",
+  "compatibility_date": "2026-01-14",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  }
+}
