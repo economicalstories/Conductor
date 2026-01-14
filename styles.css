@@ -134,214 +134,216 @@ header {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Metronome */
+/* Metronome - Mobile First */
 .metronome-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 1rem;
-}
-
-.metronome-layout {
+    max-width: 100%;
+    padding: 0.5rem;
+    height: calc(100vh - 200px);
     display: flex;
-    gap: 2rem;
     align-items: center;
     justify-content: center;
 }
 
-.metronome-slider-section {
+.metronome-main {
     display: flex;
-    gap: 1.5rem;
-    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    max-height: 500px;
 }
 
-.tempo-markings {
+.slider-column {
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.tempo-scale {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 400px;
-    padding: 1rem 0;
+    min-height: 400px;
 }
 
-.tempo-mark {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+.scale-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     cursor: pointer;
     transition: all 0.2s ease;
-    padding: 0.25rem 0.5rem;
-    border-radius: 5px;
-    user-select: none;
+    padding: 0.25rem;
+    border-radius: 4px;
 }
 
-.tempo-mark:hover {
-    color: var(--accent);
+.scale-mark:hover {
     background: rgba(212, 175, 55, 0.1);
 }
 
-.metronome-visual {
-    position: relative;
+.scale-mark.active {
+    background: rgba(212, 175, 55, 0.2);
 }
 
-.metronome-body {
-    width: 80px;
-    height: 400px;
-    background: linear-gradient(180deg, var(--card-bg) 0%, var(--secondary) 100%);
-    border: 3px solid var(--border);
-    border-radius: 10px 10px 60px 60px;
-    position: relative;
+.mark-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.mark-bpm {
+    font-size: 0.65rem;
+    color: var(--accent);
+    opacity: 0.7;
+}
+
+.slider-track-container {
+    width: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 30px var(--shadow);
-}
-
-.metronome-slider-track {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 30px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 20px var(--shadow);
 }
 
 #tempo-slider {
     -webkit-appearance: slider-vertical;
     writing-mode: bt-lr;
-    width: 8px;
-    height: 350px;
+    width: 12px;
+    height: 400px;
     background: linear-gradient(180deg,
         var(--accent) 0%,
-        var(--accent) 10%,
-        var(--card-bg) 10%,
-        var(--card-bg) 90%,
-        var(--accent) 90%,
-        var(--accent) 100%);
+        rgba(212, 175, 55, 0.3) 100%);
     outline: none;
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
+    border-radius: 6px;
+    cursor: grab;
+}
+
+#tempo-slider:active {
+    cursor: grabbing;
 }
 
 #tempo-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background: var(--accent);
-    cursor: pointer;
+    cursor: grab;
     border-radius: 50%;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
-    border: 3px solid var(--primary);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+    border: 4px solid var(--primary);
 }
 
 #tempo-slider::-moz-range-thumb {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background: var(--accent);
-    cursor: pointer;
+    cursor: grab;
     border-radius: 50%;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    border: 4px solid var(--primary);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
 }
 
-.metronome-controls-section {
+.controls-column {
     flex: 1;
-    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
 }
 
-.tempo-display {
+.bpm-display {
     text-align: center;
-    margin-bottom: 2rem;
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--card-bg);
-    border-radius: 20px;
-    border: 2px solid var(--border);
+    border-radius: 15px;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
 }
 
-.bpm-value {
-    font-size: 4rem;
-    font-weight: 300;
+.bpm-number {
+    font-size: 4.5rem;
+    font-weight: 200;
     color: var(--accent);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
 }
 
-.tempo-marking {
-    font-size: 1.5rem;
+.bpm-label {
+    font-size: 0.9rem;
     color: var(--text-muted);
     margin-top: 0.5rem;
-    font-style: italic;
+    letter-spacing: 2px;
 }
 
-.time-signature {
-    margin-bottom: 2rem;
+.time-sig-section {
+    margin: 0;
 }
 
-.time-signature label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.signature-buttons {
-    display: flex;
+.sig-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
-    flex-wrap: wrap;
 }
 
 .sig-btn {
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 0.5rem;
     background: var(--card-bg);
     border: 2px solid var(--border);
     color: var(--text);
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .sig-btn:hover {
     border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
 .sig-btn.active {
     background: var(--accent);
     color: var(--primary);
     border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
-.beat-indicator {
-    margin-bottom: 2rem;
+.beat-display {
+    padding: 1rem 0;
 }
 
 .beat-dots {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     justify-content: center;
 }
 
 .dot {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: var(--card-bg);
     border: 2px solid var(--border);
-    transition: all 0.1s ease;
+    transition: all 0.15s ease;
 }
 
 .dot.active {
     background: var(--accent);
     border-color: var(--accent);
-    box-shadow: 0 0 20px var(--accent);
-    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    transform: scale(1.3);
 }
 
 .dot.strong {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
-    box-shadow: 0 0 30px var(--accent);
-    transform: scale(1.3);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+    transform: scale(1.4);
 }
 
 /* Control Button */
@@ -515,122 +517,6 @@ header {
     border-color: var(--accent);
 }
 
-/* Notes/Pieces */
-.notes-container {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.notes-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.notes-header h2 {
-    font-size: 2rem;
-    font-weight: 300;
-}
-
-.add-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--accent);
-    color: var(--primary);
-    border: none;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.add-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
-}
-
-.pieces-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.piece-card {
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 15px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.piece-card:hover {
-    border-color: var(--accent);
-    transform: translateX(5px);
-}
-
-.piece-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 0.75rem;
-}
-
-.piece-title-section h3 {
-    font-size: 1.5rem;
-    color: var(--accent);
-    margin-bottom: 0.25rem;
-}
-
-.piece-composer {
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-.piece-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0.25rem;
-    transition: all 0.2s ease;
-}
-
-.icon-btn:hover {
-    color: var(--accent);
-    transform: scale(1.1);
-}
-
-.piece-notes {
-    color: var(--text);
-    line-height: 1.6;
-    white-space: pre-wrap;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--text-muted);
-}
-
-.empty-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
-.empty-hint {
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
 /* Timer */
 .timer-container {
     max-width: 500px;
@@ -690,283 +576,152 @@ header {
     border-color: var(--accent);
 }
 
-/* Transpose Tool */
+/* Transpose Tool - Staff Notation */
 .transpose-container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 100%;
+    padding: 1rem;
 }
 
 .transpose-container h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
     font-weight: 300;
     text-align: center;
+    color: var(--accent);
 }
 
-.transpose-description {
-    text-align: center;
-    color: var(--text-muted);
+.transpose-controls {
+    display: flex;
+    gap: 0.75rem;
     margin-bottom: 2rem;
-    font-size: 0.95rem;
+    flex-wrap: wrap;
 }
 
-.transpose-form {
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 20px;
-    padding: 2rem;
+.control-group {
+    flex: 1;
+    min-width: 100px;
 }
 
-.transpose-select {
+.control-group label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.select-control {
     width: 100%;
     padding: 0.75rem;
-    background: var(--secondary);
+    background: var(--card-bg);
     border: 2px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     color: var(--text);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.transpose-select:focus {
+.select-control:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
-.transpose-select option {
-    background: var(--secondary);
-    color: var(--text);
+.staff-section {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
 }
 
-.note-input-group {
-    display: flex;
-    gap: 1rem;
+.staff-section.concert {
+    border-color: var(--accent);
+    background: rgba(212, 175, 55, 0.05);
 }
 
-.note-select {
-    flex: 2;
-}
-
-.octave-select {
-    flex: 1;
-}
-
-.transpose-arrow {
+.staff-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
     text-align: center;
+}
+
+.staff-section.concert .staff-title {
+    color: var(--accent);
+}
+
+.staff-svg {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+}
+
+.transpose-indicator {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.arrow-down {
     font-size: 2.5rem;
     color: var(--accent);
-    margin: 1.5rem 0;
-}
-
-.result-section {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(212, 175, 55, 0.1);
-    border-radius: 15px;
-    margin-bottom: 2rem;
-}
-
-.result-section h3 {
-    color: var(--accent);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.concert-pitch-display {
-    margin: 1rem 0;
-}
-
-.concert-note {
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: var(--accent);
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-}
-
-.result-explanation {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    font-style: italic;
-}
-
-.transpose-examples {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-}
-
-.transpose-examples h3 {
-    color: var(--text-muted);
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.example-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-}
-
-.example-item {
-    background: var(--secondary);
-    padding: 1rem;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.example-item strong {
-    color: var(--text);
-    font-size: 0.85rem;
-}
-
-.example-item span {
-    color: var(--accent);
-    font-size: 0.9rem;
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-}
-
-.modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    background: var(--secondary);
-    border-radius: 20px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-    box-shadow: 0 10px 50px var(--shadow);
-    border: 2px solid var(--accent);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.modal-header h2 {
-    font-size: 1.5rem;
-    font-weight: 300;
-}
-
-.close-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 2rem;
-    cursor: pointer;
     line-height: 1;
-    transition: all 0.2s ease;
 }
 
-.close-btn:hover {
-    color: var(--accent);
-    transform: rotate(90deg);
-}
-
-.modal-body {
-    padding: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
+.indicator-text {
     font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
 }
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-}
-
-.modal-footer {
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    border-top: 1px solid var(--border);
-}
-
-/* Responsive */
+/* Responsive - Mobile Optimizations */
 @media (max-width: 600px) {
-    .metronome-layout {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .metronome-slider-section {
-        order: 2;
-    }
-
-    .metronome-controls-section {
-        order: 1;
-        max-width: 100%;
-    }
-
-    .tempo-display {
-        padding: 1.5rem;
-    }
-
-    .bpm-value {
-        font-size: 3rem;
+    .bpm-number {
+        font-size: 3.5rem;
     }
 
     .timer-display {
-        font-size: 4rem;
+        font-size: 3.5rem;
     }
 
     .tab-btn {
-        font-size: 0.75rem;
-        padding: 0.75rem 0.25rem;
+        font-size: 0.7rem;
+        padding: 0.75rem 0.5rem;
     }
 
-    .example-grid {
-        grid-template-columns: 1fr;
+    .metronome-container {
+        height: calc(100vh - 180px);
+    }
+
+    .slider-track-container {
+        width: 50px;
+    }
+
+    #tempo-slider {
+        height: 350px;
+    }
+
+    .mark-label {
+        font-size: 0.65rem;
+    }
+
+    .mark-bpm {
+        font-size: 0.6rem;
+    }
+
+    .sig-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .staff-svg {
+        max-width: 100%;
     }
 }
 

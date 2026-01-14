@@ -22,8 +22,7 @@ const state = {
         seconds: 0,
         isRunning: false,
         targetSeconds: null
-    },
-    pieces: []
+    }
 };
 
 // Initialize audio context on first user interaction
@@ -62,31 +61,33 @@ tabButtons.forEach(button => {
 // ============ METRONOME ============
 const tempoSlider = document.getElementById('tempo-slider');
 const bpmDisplay = document.getElementById('bpm-display');
-const tempoMarking = document.getElementById('tempo-marking');
 const metronomeToggle = document.getElementById('metronome-toggle');
-const tempoMarkButtons = document.querySelectorAll('.tempo-mark');
+const scaleMarks = document.querySelectorAll('.scale-mark');
 const signatureButtons = document.querySelectorAll('.sig-btn');
 const beatDots = document.querySelectorAll('.dot');
 
-// Tempo markings
-function getTempoMarking(bpm) {
-    if (bpm <= 45) return 'Grave';
-    if (bpm <= 66) return 'Largo';
-    if (bpm <= 80) return 'Adagio';
-    if (bpm <= 100) return 'Andante';
-    if (bpm <= 132) return 'Moderato';
-    if (bpm <= 156) return 'Allegro';
-    if (bpm <= 176) return 'Vivace';
-    if (bpm <= 192) return 'Presto';
-    return 'Prestissimo';
-}
-
-// Update BPM display
+// Update BPM display and highlight scale marks
 function updateBPM(bpm) {
     state.metronome.bpm = bpm;
     bpmDisplay.textContent = bpm;
-    tempoMarking.textContent = getTempoMarking(bpm);
     tempoSlider.value = bpm;
+
+    // Highlight closest scale mark
+    let closestMark = null;
+    let closestDiff = Infinity;
+    scaleMarks.forEach(mark => {
+        const markBpm = parseInt(mark.dataset.bpm);
+        const diff = Math.abs(markBpm - bpm);
+        if (diff < closestDiff) {
+            closestDiff = diff;
+            closestMark = mark;
+        }
+    });
+
+    scaleMarks.forEach(mark => mark.classList.remove('active'));
+    if (closestMark && closestDiff < 20) {
+        closestMark.classList.add('active');
+    }
 
     // Restart metronome if playing
     if (state.metronome.isPlaying) {
@@ -100,10 +101,10 @@ tempoSlider.addEventListener('input', (e) => {
     updateBPM(parseInt(e.target.value));
 });
 
-// Tempo marking buttons
-tempoMarkButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        updateBPM(parseInt(button.dataset.bpm));
+// Scale mark buttons
+scaleMarks.forEach(mark => {
+    mark.addEventListener('click', () => {
+        updateBPM(parseInt(mark.dataset.bpm));
     });
 });
 
@@ -356,167 +357,6 @@ tunerToggle.addEventListener('click', () => {
     }
 });
 
-// ============ PIECES / NOTES ============
-const addPieceBtn = document.getElementById('add-piece-btn');
-const pieceModal = document.getElementById('piece-modal');
-const closeModalBtn = document.getElementById('close-modal');
-const cancelModalBtn = document.getElementById('cancel-modal');
-const savePieceBtn = document.getElementById('save-piece');
-const piecesList = document.getElementById('pieces-list');
-const emptyState = document.getElementById('empty-state');
-
-let editingPieceId = null;
-
-// Load pieces from localStorage
-function loadPieces() {
-    const saved = localStorage.getItem('conductorPieces');
-    if (saved) {
-        state.pieces = JSON.parse(saved);
-    }
-    renderPieces();
-}
-
-// Save pieces to localStorage
-function savePieces() {
-    localStorage.setItem('conductorPieces', JSON.stringify(state.pieces));
-}
-
-// Render pieces list
-function renderPieces() {
-    piecesList.innerHTML = '';
-
-    if (state.pieces.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-    }
-
-    emptyState.style.display = 'none';
-
-    state.pieces.forEach(piece => {
-        const card = document.createElement('div');
-        card.className = 'piece-card';
-        card.innerHTML = `
-            <div class="piece-header">
-                <div class="piece-title-section">
-                    <h3>${escapeHtml(piece.title)}</h3>
-                    <div class="piece-composer">${escapeHtml(piece.composer)}</div>
-                </div>
-                <div class="piece-actions">
-                    <button class="icon-btn edit-piece" data-id="${piece.id}">✏️</button>
-                    <button class="icon-btn delete-piece" data-id="${piece.id}">🗑️</button>
-                </div>
-            </div>
-            <div class="piece-notes">${escapeHtml(piece.notes)}</div>
-        `;
-
-        piecesList.appendChild(card);
-    });
-
-    // Attach event listeners
-    document.querySelectorAll('.edit-piece').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            editPiece(btn.dataset.id);
-        });
-    });
-
-    document.querySelectorAll('.delete-piece').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            deletePiece(btn.dataset.id);
-        });
-    });
-}
-
-// Escape HTML to prevent XSS
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Open modal for new piece
-addPieceBtn.addEventListener('click', () => {
-    editingPieceId = null;
-    document.getElementById('modal-title').textContent = 'Add New Piece';
-    document.getElementById('piece-title').value = '';
-    document.getElementById('piece-composer').value = '';
-    document.getElementById('piece-notes').value = '';
-    pieceModal.classList.add('active');
-});
-
-// Close modal
-function closeModal() {
-    pieceModal.classList.remove('active');
-    editingPieceId = null;
-}
-
-closeModalBtn.addEventListener('click', closeModal);
-cancelModalBtn.addEventListener('click', closeModal);
-
-pieceModal.addEventListener('click', (e) => {
-    if (e.target === pieceModal) {
-        closeModal();
-    }
-});
-
-// Save piece
-savePieceBtn.addEventListener('click', () => {
-    const title = document.getElementById('piece-title').value.trim();
-    const composer = document.getElementById('piece-composer').value.trim();
-    const notes = document.getElementById('piece-notes').value.trim();
-
-    if (!title) {
-        alert('Please enter a title');
-        return;
-    }
-
-    if (editingPieceId) {
-        // Edit existing piece
-        const piece = state.pieces.find(p => p.id === editingPieceId);
-        if (piece) {
-            piece.title = title;
-            piece.composer = composer;
-            piece.notes = notes;
-        }
-    } else {
-        // Add new piece
-        const newPiece = {
-            id: Date.now().toString(),
-            title,
-            composer,
-            notes
-        };
-        state.pieces.unshift(newPiece);
-    }
-
-    savePieces();
-    renderPieces();
-    closeModal();
-});
-
-// Edit piece
-function editPiece(id) {
-    const piece = state.pieces.find(p => p.id === id);
-    if (!piece) return;
-
-    editingPieceId = id;
-    document.getElementById('modal-title').textContent = 'Edit Piece';
-    document.getElementById('piece-title').value = piece.title;
-    document.getElementById('piece-composer').value = piece.composer;
-    document.getElementById('piece-notes').value = piece.notes;
-    pieceModal.classList.add('active');
-}
-
-// Delete piece
-function deletePiece(id) {
-    if (confirm('Are you sure you want to delete this piece?')) {
-        state.pieces = state.pieces.filter(p => p.id !== id);
-        savePieces();
-        renderPieces();
-    }
-}
-
 // ============ TIMER ============
 const timerDisplay = document.getElementById('timer-display');
 const timerStartBtn = document.getElementById('timer-start');
@@ -590,99 +430,116 @@ timerPresetButtons.forEach(button => {
     });
 });
 
-// ============ TRANSPOSE TOOL ============
+// ============ TRANSPOSE TOOL with Staff Notation ============
 const instrumentSelect = document.getElementById('instrument-select');
 const noteInput = document.getElementById('note-input');
 const octaveInput = document.getElementById('octave-input');
-const concertPitchResult = document.getElementById('concert-pitch-result');
-const resultExplanation = document.getElementById('result-explanation');
+const transposeInfo = document.getElementById('transpose-info');
 
-// Note to semitone mapping (C = 0)
-const noteToSemitones = {
-    'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5,
-    'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
-};
+// Note to semitone mapping
+const noteToSemitones = {'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11};
+const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-const semitonesToNote = ['C', 'C♯/D♭', 'D', 'D♯/E♭', 'E', 'F', 'F♯/G♭', 'G', 'G♯/A♭', 'A', 'A♯/B♭', 'B'];
+// Transpositions
+const transpositions = {'C': 0, 'Bb': -2, 'Eb': -9, 'F': -7, 'A': -3, 'bass': -12, 'alto': 0};
 
-// Transposition intervals (in semitones, negative = down)
-const transpositions = {
-    'C': 0,
-    'Bb': -2,    // Bb instruments sound a major 2nd lower
-    'Eb': -9,    // Eb instruments sound a major 6th lower (or minor 3rd higher)
-    'F': -7,     // F instruments sound a perfect 5th lower
-    'A': -3,     // A instruments sound a minor 3rd lower
-    'Db': -1,    // Db instruments sound a minor 2nd lower
-    'bass': -12, // Bass clef (same notes, octave lower in relation to treble)
-    'alto': 0,   // Alto clef C4 = middle C (same as treble conceptually)
-    'tenor': 0   // Tenor clef (similar treatment)
-};
+// Draw clef on staff
+function drawClef(clefGroup, clefType) {
+    clefGroup.innerHTML = '';
+    if (clefType === 'treble' || clefType === 'C' || clefType === 'Bb' || clefType === 'Eb' || clefType === 'F' || clefType === 'A') {
+        clefGroup.innerHTML = '<text x="50" y="130" font-size="70" fill="#d4af37" font-family="serif">𝄞</text>';
+    } else if (clefType === 'bass') {
+        clefGroup.innerHTML = '<text x="50" y="110" font-size="70" fill="#d4af37" font-family="serif">𝄢</text>';
+    } else if (clefType === 'alto') {
+        clefGroup.innerHTML = '<text x="50" y="115" font-size="70" fill="#d4af37" font-family="serif">𝄡</text>';
+    }
+}
 
+// Get Y position for note on treble staff
+function getNoteY(note, octave) {
+    const positions = {
+        'C': {3: 190, 4: 140, 5: 90, 6: 40},
+        'D': {3: 180, 4: 130, 5: 80, 6: 30},
+        'E': {3: 170, 4: 120, 5: 70, 6: 20},
+        'F': {3: 160, 4: 110, 5: 60, 6: 10},
+        'G': {3: 150, 4: 100, 5: 50, 6: 0},
+        'A': {3: 140, 4: 90, 5: 40, 6: -10},
+        'B': {3: 130, 4: 80, 5: 30, 6: -20}
+    };
+    const baseNote = note.replace('#', '');
+    return positions[baseNote]?.[octave] || 100;
+}
+
+// Draw note on staff
+function drawNote(noteGroup, note, octave, x = 200) {
+    noteGroup.innerHTML = '';
+    const y = getNoteY(note, octave);
+
+    // Draw ledger lines if needed
+    if (y > 140) {
+        for (let ly = 150; ly <= y; ly += 10) {
+            if (ly > 140) noteGroup.innerHTML += `<line x1="${x-15}" y1="${ly}" x2="${x+15}" y2="${ly}" stroke="#d4af37" stroke-width="1.5"/>`;
+        }
+    } else if (y < 60) {
+        for (let ly = 50; ly >= y; ly -= 10) {
+            if (ly < 60) noteGroup.innerHTML += `<line x1="${x-15}" y1="${ly}" x2="${x+15}" y2="${ly}" stroke="#d4af37" stroke-width="1.5"/>`;
+        }
+    }
+
+    // Draw note head
+    noteGroup.innerHTML += `<ellipse cx="${x}" cy="${y}" rx="8" ry="6" fill="#d4af37" transform="rotate(-20 ${x} ${y})"/>`;
+
+    // Draw accidental if sharp
+    if (note.includes('#')) {
+        noteGroup.innerHTML += `<text x="${x-20}" y="${y+5}" font-size="24" fill="#d4af37">#</text>`;
+    }
+}
+
+// Calculate and render transposition
 function calculateTranspose() {
+    if (!instrumentSelect || !noteInput || !octaveInput) return;
+
     const instrument = instrumentSelect.value;
     const note = noteInput.value;
     const octave = parseInt(octaveInput.value);
 
-    // Get transposition interval
+    // Calculate concert pitch
     const interval = transpositions[instrument] || 0;
-
-    // Calculate note in semitones (C0 = 0)
     const writtenSemitones = (octave * 12) + noteToSemitones[note];
-
-    // Apply transposition
     const concertSemitones = writtenSemitones + interval;
-
-    // Convert back to note and octave
     const concertOctave = Math.floor(concertSemitones / 12);
-    const concertNoteIndex = ((concertSemitones % 12) + 12) % 12; // Handle negative modulo
-    const concertNote = semitonesToNote[concertNoteIndex];
+    const concertNote = noteNames[(concertSemitones % 12 + 12) % 12];
 
-    // Display result
-    const resultHTML = `<div class="concert-note">${concertNote}${concertOctave}</div>`;
-    concertPitchResult.innerHTML = resultHTML;
+    // Draw written pitch staff
+    const writtenClef = document.getElementById('written-clef');
+    const writtenNoteGroup = document.getElementById('written-note');
+    drawClef(writtenClef, instrument);
+    drawNote(writtenNoteGroup, note, octave);
 
-    // Update explanation
-    let explanation = '';
-    if (instrument === 'C') {
-        explanation = 'Already in concert pitch';
-    } else if (instrument === 'Bb') {
-        explanation = 'B♭ instruments sound a major 2nd (whole step) lower';
-    } else if (instrument === 'Eb') {
-        explanation = 'E♭ instruments sound a major 6th lower';
-    } else if (instrument === 'F') {
-        explanation = 'F instruments sound a perfect 5th lower';
-    } else if (instrument === 'A') {
-        explanation = 'A instruments sound a minor 3rd lower';
-    } else if (instrument === 'Db') {
-        explanation = 'D♭ instruments sound a minor 2nd (half step) lower';
-    } else if (instrument === 'bass') {
-        explanation = 'Bass clef notes sound an octave lower than written in treble';
-    } else if (instrument === 'alto') {
-        explanation = 'Alto clef middle line is middle C';
-    } else if (instrument === 'tenor') {
-        explanation = 'Tenor clef second line from top is middle C';
+    // Draw concert pitch staff (always treble)
+    const concertClef = document.getElementById('concert-clef');
+    const concertNoteGroup = document.getElementById('concert-note');
+    drawClef(concertClef, 'treble');
+    drawNote(concertNoteGroup, concertNote, concertOctave);
+
+    // Update info text
+    if (transposeInfo) {
+        transposeInfo.textContent = instrument === 'C' ? 'Same pitch' : `Sounds: ${concertNote}${concertOctave}`;
     }
-
-    resultExplanation.textContent = explanation;
 }
 
-// Event listeners for transpose
+// Event listeners
 if (instrumentSelect && noteInput && octaveInput) {
     instrumentSelect.addEventListener('change', calculateTranspose);
     noteInput.addEventListener('change', calculateTranspose);
     octaveInput.addEventListener('change', calculateTranspose);
-
-    // Initial calculation
-    calculateTranspose();
+    setTimeout(calculateTranspose, 100); // Initial render
 }
 
 // ============ INITIALIZATION ============
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize beat dots
     updateBeatDots();
-
-    // Load saved pieces
-    loadPieces();
 
     // Initialize timer display
     updateTimerDisplay();
