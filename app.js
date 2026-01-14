@@ -64,7 +64,7 @@ const tempoSlider = document.getElementById('tempo-slider');
 const bpmDisplay = document.getElementById('bpm-display');
 const tempoMarking = document.getElementById('tempo-marking');
 const metronomeToggle = document.getElementById('metronome-toggle');
-const presetButtons = document.querySelectorAll('.preset-btn');
+const tempoMarkButtons = document.querySelectorAll('.tempo-mark');
 const signatureButtons = document.querySelectorAll('.sig-btn');
 const beatDots = document.querySelectorAll('.dot');
 
@@ -100,8 +100,8 @@ tempoSlider.addEventListener('input', (e) => {
     updateBPM(parseInt(e.target.value));
 });
 
-// Preset buttons
-presetButtons.forEach(button => {
+// Tempo marking buttons
+tempoMarkButtons.forEach(button => {
     button.addEventListener('click', () => {
         updateBPM(parseInt(button.dataset.bpm));
     });
@@ -589,6 +589,92 @@ timerPresetButtons.forEach(button => {
         timerStartBtn.click();
     });
 });
+
+// ============ TRANSPOSE TOOL ============
+const instrumentSelect = document.getElementById('instrument-select');
+const noteInput = document.getElementById('note-input');
+const octaveInput = document.getElementById('octave-input');
+const concertPitchResult = document.getElementById('concert-pitch-result');
+const resultExplanation = document.getElementById('result-explanation');
+
+// Note to semitone mapping (C = 0)
+const noteToSemitones = {
+    'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5,
+    'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
+};
+
+const semitonesToNote = ['C', 'C♯/D♭', 'D', 'D♯/E♭', 'E', 'F', 'F♯/G♭', 'G', 'G♯/A♭', 'A', 'A♯/B♭', 'B'];
+
+// Transposition intervals (in semitones, negative = down)
+const transpositions = {
+    'C': 0,
+    'Bb': -2,    // Bb instruments sound a major 2nd lower
+    'Eb': -9,    // Eb instruments sound a major 6th lower (or minor 3rd higher)
+    'F': -7,     // F instruments sound a perfect 5th lower
+    'A': -3,     // A instruments sound a minor 3rd lower
+    'Db': -1,    // Db instruments sound a minor 2nd lower
+    'bass': -12, // Bass clef (same notes, octave lower in relation to treble)
+    'alto': 0,   // Alto clef C4 = middle C (same as treble conceptually)
+    'tenor': 0   // Tenor clef (similar treatment)
+};
+
+function calculateTranspose() {
+    const instrument = instrumentSelect.value;
+    const note = noteInput.value;
+    const octave = parseInt(octaveInput.value);
+
+    // Get transposition interval
+    const interval = transpositions[instrument] || 0;
+
+    // Calculate note in semitones (C0 = 0)
+    const writtenSemitones = (octave * 12) + noteToSemitones[note];
+
+    // Apply transposition
+    const concertSemitones = writtenSemitones + interval;
+
+    // Convert back to note and octave
+    const concertOctave = Math.floor(concertSemitones / 12);
+    const concertNoteIndex = ((concertSemitones % 12) + 12) % 12; // Handle negative modulo
+    const concertNote = semitonesToNote[concertNoteIndex];
+
+    // Display result
+    const resultHTML = `<div class="concert-note">${concertNote}${concertOctave}</div>`;
+    concertPitchResult.innerHTML = resultHTML;
+
+    // Update explanation
+    let explanation = '';
+    if (instrument === 'C') {
+        explanation = 'Already in concert pitch';
+    } else if (instrument === 'Bb') {
+        explanation = 'B♭ instruments sound a major 2nd (whole step) lower';
+    } else if (instrument === 'Eb') {
+        explanation = 'E♭ instruments sound a major 6th lower';
+    } else if (instrument === 'F') {
+        explanation = 'F instruments sound a perfect 5th lower';
+    } else if (instrument === 'A') {
+        explanation = 'A instruments sound a minor 3rd lower';
+    } else if (instrument === 'Db') {
+        explanation = 'D♭ instruments sound a minor 2nd (half step) lower';
+    } else if (instrument === 'bass') {
+        explanation = 'Bass clef notes sound an octave lower than written in treble';
+    } else if (instrument === 'alto') {
+        explanation = 'Alto clef middle line is middle C';
+    } else if (instrument === 'tenor') {
+        explanation = 'Tenor clef second line from top is middle C';
+    }
+
+    resultExplanation.textContent = explanation;
+}
+
+// Event listeners for transpose
+if (instrumentSelect && noteInput && octaveInput) {
+    instrumentSelect.addEventListener('change', calculateTranspose);
+    noteInput.addEventListener('change', calculateTranspose);
+    octaveInput.addEventListener('change', calculateTranspose);
+
+    // Initial calculation
+    calculateTranspose();
+}
 
 // ============ INITIALIZATION ============
 document.addEventListener('DOMContentLoaded', () => {
