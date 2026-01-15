@@ -160,21 +160,21 @@ header {
 }
 
 .tempo-scale {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    position: relative;
     height: 400px;
 }
 
 .scale-mark {
+    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     cursor: pointer;
     transition: all 0.2s ease;
     padding: 0.25rem 0.5rem;
-    margin: -0.5rem 0;
     border-radius: 4px;
+    transform: translateY(-50%);
+    right: 0;
 }
 
 .scale-mark:hover {
