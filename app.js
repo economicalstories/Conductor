@@ -446,42 +446,80 @@ const transposeState = {
     writtenOctave: null
 };
 
+// Note positions for different clef types (staff lines at 40,60,80,100,120)
+const trebleNotePositions = [
+    { y: 140, note: 'C', octave: 4 }, // Below staff (middle C)
+    { y: 130, note: 'D', octave: 4 },
+    { y: 120, note: 'E', octave: 4 }, // Bottom line
+    { y: 110, note: 'F', octave: 4 },
+    { y: 100, note: 'G', octave: 4 }, // Line
+    { y: 90, note: 'A', octave: 4 },
+    { y: 80, note: 'B', octave: 4 },  // Middle line
+    { y: 70, note: 'C', octave: 5 },
+    { y: 60, note: 'D', octave: 5 },  // Line
+    { y: 50, note: 'E', octave: 5 },
+    { y: 40, note: 'F', octave: 5 },  // Top line
+    { y: 30, note: 'G', octave: 5 },
+    { y: 20, note: 'A', octave: 5 }
+];
+
+const bassNotePositions = [
+    { y: 140, note: 'E', octave: 2 }, // Below staff
+    { y: 130, note: 'F', octave: 2 },
+    { y: 120, note: 'G', octave: 2 }, // Bottom line
+    { y: 110, note: 'A', octave: 2 },
+    { y: 100, note: 'B', octave: 2 }, // Line
+    { y: 90, note: 'C', octave: 3 },
+    { y: 80, note: 'D', octave: 3 },  // Middle line
+    { y: 70, note: 'E', octave: 3 },
+    { y: 60, note: 'F', octave: 3 },  // Line (F clef line)
+    { y: 50, note: 'G', octave: 3 },
+    { y: 40, note: 'A', octave: 3 },  // Top line
+    { y: 30, note: 'B', octave: 3 },
+    { y: 20, note: 'C', octave: 4 }
+];
+
+const altoNotePositions = [
+    { y: 140, note: 'D', octave: 3 }, // Below staff
+    { y: 130, note: 'E', octave: 3 },
+    { y: 120, note: 'F', octave: 3 }, // Bottom line
+    { y: 110, note: 'G', octave: 3 },
+    { y: 100, note: 'A', octave: 3 }, // Line
+    { y: 90, note: 'B', octave: 3 },
+    { y: 80, note: 'C', octave: 4 },  // Middle line (middle C)
+    { y: 70, note: 'D', octave: 4 },
+    { y: 60, note: 'E', octave: 4 },  // Line
+    { y: 50, note: 'F', octave: 4 },
+    { y: 40, note: 'G', octave: 4 },  // Top line
+    { y: 30, note: 'A', octave: 4 },
+    { y: 20, note: 'B', octave: 4 }
+];
+
 // Clef configurations
 const clefs = [
-    { name: 'treble', symbol: '𝄞', label: 'Treble Clef', transpose: 0, instrumentLabel: 'Concert Pitch (C)', y: 80, fontSize: 100 },
-    { name: 'Bb', symbol: '𝄞', label: 'B♭ Treble', transpose: -2, instrumentLabel: 'B♭ (Cl, Tpt, Ten Sax)', y: 80, fontSize: 100 },
-    { name: 'Eb', symbol: '𝄞', label: 'E♭ Treble', transpose: -9, instrumentLabel: 'E♭ (Alto Sax)', y: 80, fontSize: 100 },
-    { name: 'F', symbol: '𝄞', label: 'F Treble', transpose: -7, instrumentLabel: 'F (Horn)', y: 80, fontSize: 100 },
-    { name: 'bass', symbol: '𝄢', label: 'Bass Clef', transpose: -12, instrumentLabel: 'Bass Clef', y: 70, fontSize: 90 },
-    { name: 'alto', symbol: '𝄡', label: 'Alto Clef', transpose: 0, instrumentLabel: 'Alto Clef', y: 80, fontSize: 100 }
+    { name: 'treble', symbol: '𝄞', label: 'Treble Clef', transpose: 0, instrumentLabel: 'Concert Pitch (C)', y: 80, fontSize: 100, clefType: 'treble', notePositions: trebleNotePositions },
+    { name: 'Bb', symbol: '𝄞', label: 'B♭ Treble', transpose: -2, instrumentLabel: 'B♭ (Cl, Tpt, Ten Sax)', y: 80, fontSize: 100, clefType: 'treble', notePositions: trebleNotePositions },
+    { name: 'Eb', symbol: '𝄞', label: 'E♭ Treble', transpose: -9, instrumentLabel: 'E♭ (Alto Sax)', y: 80, fontSize: 100, clefType: 'treble', notePositions: trebleNotePositions },
+    { name: 'F', symbol: '𝄞', label: 'F Treble', transpose: -7, instrumentLabel: 'F (Horn)', y: 80, fontSize: 100, clefType: 'treble', notePositions: trebleNotePositions },
+    { name: 'bass', symbol: '𝄢', label: 'Bass Clef', transpose: -12, instrumentLabel: 'Bass Clef', y: 60, fontSize: 85, clefType: 'bass', notePositions: bassNotePositions },
+    { name: 'alto', symbol: '𝄡', label: 'Alto Clef', transpose: 0, instrumentLabel: 'Alto Clef', y: 80, fontSize: 100, clefType: 'alto', notePositions: altoNotePositions }
 ];
 
 // Note names
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-// Y positions for notes on treble staff (staff lines at 40,60,80,100,120)
-const notePositions = [
-    { y: 140, note: 'C', octave: 4 }, // Below staff (middle C)
-    { y: 130, note: 'D', octave: 4 }, // Below staff
-    { y: 120, note: 'E', octave: 4 }, // Bottom line
-    { y: 110, note: 'F', octave: 4 }, // Space
-    { y: 100, note: 'G', octave: 4 }, // Line
-    { y: 90, note: 'A', octave: 4 },  // Space
-    { y: 80, note: 'B', octave: 4 },  // Middle line
-    { y: 70, note: 'C', octave: 5 },  // Space
-    { y: 60, note: 'D', octave: 5 },  // Line
-    { y: 50, note: 'E', octave: 5 },  // Space
-    { y: 40, note: 'F', octave: 5 },  // Top line
-    { y: 30, note: 'G', octave: 5 },  // Above staff
-    { y: 20, note: 'A', octave: 5 }   // Above staff
-];
-
 // Cycle through clefs
 function cycleClef() {
     transposeState.clefIndex = (transposeState.clefIndex + 1) % clefs.length;
     updateClef();
-    if (transposeState.writtenNote !== null) {
-        updateTransposition();
+
+    // Clear notes when changing clef type
+    transposeState.writtenNote = null;
+    transposeState.writtenOctave = null;
+    writtenNoteGroup.innerHTML = '';
+    concertNoteGroup.innerHTML = '';
+    if (transposeResult) {
+        transposeResult.textContent = 'Tap staff above to begin';
     }
 }
 
@@ -516,6 +554,10 @@ function placeNote(event) {
     }
 
     const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+    // Get note positions for current clef
+    const clef = clefs[transposeState.clefIndex];
+    const notePositions = clef.notePositions;
 
     // Find closest note position
     let closest = notePositions[0];
@@ -572,8 +614,8 @@ function updateTransposition() {
     const concertNoteIndex = ((concertSemitones % 12) + 12) % 12;
     const concertNote = noteNames[concertNoteIndex];
 
-    // Find Y position for concert note
-    const concertPos = notePositions.find(p => p.note === concertNote && p.octave === concertOctave);
+    // Find Y position for concert note (always treble clef)
+    const concertPos = trebleNotePositions.find(p => p.note === concertNote && p.octave === concertOctave);
     const concertY = concertPos ? concertPos.y : 80;
 
     drawWholeNote(concertNoteGroup, concertY, 200);
