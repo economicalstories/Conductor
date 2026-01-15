@@ -430,110 +430,173 @@ timerPresetButtons.forEach(button => {
     });
 });
 
-// ============ TRANSPOSE TOOL with Staff Notation ============
-const instrumentSelect = document.getElementById('instrument-select');
-const noteInput = document.getElementById('note-input');
-const octaveInput = document.getElementById('octave-input');
-const transposeInfo = document.getElementById('transpose-info');
+// ============ TRANSPOSE TOOL - Touch-First ============
+const writtenStaff = document.getElementById('written-staff');
+const writtenClefGroup = document.getElementById('written-clef');
+const writtenNoteGroup = document.getElementById('written-note');
+const writtenTouchArea = document.getElementById('written-touch-area');
+const concertNoteGroup = document.getElementById('concert-note');
+const instrumentLabel = document.getElementById('instrument-label');
+const transposeResult = document.getElementById('transpose-result');
 
-// Note to semitone mapping
-const noteToSemitones = {'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11};
+// Transpose state
+const transposeState = {
+    clefIndex: 0,
+    writtenNote: null,
+    writtenOctave: null
+};
+
+// Clef configurations
+const clefs = [
+    { name: 'treble', symbol: '𝄞', label: 'Treble Clef', transpose: 0, instrumentLabel: 'Concert Pitch (C)' },
+    { name: 'Bb', symbol: '𝄞', label: 'B♭ Treble', transpose: -2, instrumentLabel: 'B♭ (Cl, Tpt, Ten Sax)' },
+    { name: 'Eb', symbol: '𝄞', label: 'E♭ Treble', transpose: -9, instrumentLabel: 'E♭ (Alto Sax)' },
+    { name: 'F', symbol: '𝄞', label: 'F Treble', transpose: -7, instrumentLabel: 'F (Horn)' },
+    { name: 'bass', symbol: '𝄢', label: 'Bass Clef', transpose: -12, instrumentLabel: 'Bass Clef' },
+    { name: 'alto', symbol: '𝄡', label: 'Alto Clef', transpose: 0, instrumentLabel: 'Alto Clef' }
+];
+
+// Note names
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-// Transpositions
-const transpositions = {'C': 0, 'Bb': -2, 'Eb': -9, 'F': -7, 'A': -3, 'bass': -12, 'alto': 0};
+// Y positions for notes on staff (middle C = 80, staff lines at 40,60,80,100,120)
+const notePositions = [
+    { y: 130, note: 'B', octave: 2 }, // Below staff
+    { y: 120, note: 'C', octave: 3 },
+    { y: 110, note: 'D', octave: 3 },
+    { y: 100, note: 'E', octave: 3 },
+    { y: 90, note: 'F', octave: 3 },
+    { y: 80, note: 'G', octave: 3 },  // Middle line
+    { y: 70, note: 'A', octave: 3 },
+    { y: 60, note: 'B', octave: 3 },
+    { y: 50, note: 'C', octave: 4 },
+    { y: 40, note: 'D', octave: 4 },
+    { y: 30, note: 'E', octave: 4 },  // Above staff
+    { y: 20, note: 'F', octave: 4 },
+    { y: 10, note: 'G', octave: 4 }
+];
 
-// Draw clef on staff
-function drawClef(clefGroup, clefType) {
-    clefGroup.innerHTML = '';
-    if (clefType === 'treble' || clefType === 'C' || clefType === 'Bb' || clefType === 'Eb' || clefType === 'F' || clefType === 'A') {
-        clefGroup.innerHTML = '<text x="50" y="130" font-size="70" fill="#d4af37" font-family="serif">𝄞</text>';
-    } else if (clefType === 'bass') {
-        clefGroup.innerHTML = '<text x="50" y="110" font-size="70" fill="#d4af37" font-family="serif">𝄢</text>';
-    } else if (clefType === 'alto') {
-        clefGroup.innerHTML = '<text x="50" y="115" font-size="70" fill="#d4af37" font-family="serif">𝄡</text>';
+// Cycle through clefs
+function cycleClef() {
+    transposeState.clefIndex = (transposeState.clefIndex + 1) % clefs.length;
+    updateClef();
+    if (transposeState.writtenNote !== null) {
+        updateTransposition();
     }
 }
 
-// Get Y position for note on treble staff
-function getNoteY(note, octave) {
-    const positions = {
-        'C': {3: 190, 4: 140, 5: 90, 6: 40},
-        'D': {3: 180, 4: 130, 5: 80, 6: 30},
-        'E': {3: 170, 4: 120, 5: 70, 6: 20},
-        'F': {3: 160, 4: 110, 5: 60, 6: 10},
-        'G': {3: 150, 4: 100, 5: 50, 6: 0},
-        'A': {3: 140, 4: 90, 5: 40, 6: -10},
-        'B': {3: 130, 4: 80, 5: 30, 6: -20}
-    };
-    const baseNote = note.replace('#', '');
-    return positions[baseNote]?.[octave] || 100;
+// Update clef display
+function updateClef() {
+    const clef = clefs[transposeState.clefIndex];
+    const textElement = writtenClefGroup.querySelector('text');
+    if (textElement) {
+        textElement.textContent = clef.symbol;
+    }
+    if (instrumentLabel) {
+        instrumentLabel.textContent = clef.instrumentLabel;
+    }
 }
 
-// Draw note on staff
-function drawNote(noteGroup, note, octave, x = 200) {
-    noteGroup.innerHTML = '';
-    const y = getNoteY(note, octave);
+// Place note on staff based on touch/click position
+function placeNote(event) {
+    event.preventDefault();
+
+    const svg = writtenStaff;
+    const pt = svg.createSVGPoint();
+
+    // Get touch/click position
+    if (event.touches) {
+        pt.x = event.touches[0].clientX;
+        pt.y = event.touches[0].clientY;
+    } else {
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+    }
+
+    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+    // Find closest note position
+    let closest = notePositions[0];
+    let minDist = Math.abs(svgP.y - closest.y);
+
+    notePositions.forEach(pos => {
+        const dist = Math.abs(svgP.y - pos.y);
+        if (dist < minDist) {
+            minDist = dist;
+            closest = pos;
+        }
+    });
+
+    transposeState.writtenNote = closest.note;
+    transposeState.writtenOctave = closest.octave;
+
+    drawWholeNote(writtenNoteGroup, closest.y, 200);
+    updateTransposition();
+}
+
+// Draw whole note (semibreve)
+function drawWholeNote(group, y, x) {
+    let html = '';
 
     // Draw ledger lines if needed
-    if (y > 140) {
-        for (let ly = 150; ly <= y; ly += 10) {
-            if (ly > 140) noteGroup.innerHTML += `<line x1="${x-15}" y1="${ly}" x2="${x+15}" y2="${ly}" stroke="#d4af37" stroke-width="1.5"/>`;
+    if (y > 120) {
+        for (let ly = 130; ly <= y; ly += 10) {
+            html += `<line x1="${x-20}" y1="${ly}" x2="${x+20}" y2="${ly}" stroke="#d4af37" stroke-width="2"/>`;
         }
-    } else if (y < 60) {
-        for (let ly = 50; ly >= y; ly -= 10) {
-            if (ly < 60) noteGroup.innerHTML += `<line x1="${x-15}" y1="${ly}" x2="${x+15}" y2="${ly}" stroke="#d4af37" stroke-width="1.5"/>`;
+    } else if (y < 40) {
+        for (let ly = 30; ly >= y; ly -= 10) {
+            html += `<line x1="${x-20}" y1="${ly}" x2="${x+20}" y2="${ly}" stroke="#d4af37" stroke-width="2"/>`;
         }
     }
 
-    // Draw note head
-    noteGroup.innerHTML += `<ellipse cx="${x}" cy="${y}" rx="8" ry="6" fill="#d4af37" transform="rotate(-20 ${x} ${y})"/>`;
+    // Draw whole note (semibreve) - hollow ellipse
+    html += `<ellipse cx="${x}" cy="${y}" rx="12" ry="9" fill="none" stroke="#d4af37" stroke-width="3"/>`;
 
-    // Draw accidental if sharp
-    if (note.includes('#')) {
-        noteGroup.innerHTML += `<text x="${x-20}" y="${y+5}" font-size="24" fill="#d4af37">#</text>`;
-    }
+    // Add note label
+    html += `<text x="${x+25}" y="${y+5}" font-size="14" fill="#d4af37" font-weight="bold">${transposeState.writtenNote}${transposeState.writtenOctave}</text>`;
+
+    group.innerHTML = html;
 }
 
-// Calculate and render transposition
-function calculateTranspose() {
-    if (!instrumentSelect || !noteInput || !octaveInput) return;
+// Update transposition
+function updateTransposition() {
+    if (transposeState.writtenNote === null) return;
 
-    const instrument = instrumentSelect.value;
-    const note = noteInput.value;
-    const octave = parseInt(octaveInput.value);
-
-    // Calculate concert pitch
-    const interval = transpositions[instrument] || 0;
-    const writtenSemitones = (octave * 12) + noteToSemitones[note];
-    const concertSemitones = writtenSemitones + interval;
+    const clef = clefs[transposeState.clefIndex];
+    const noteIndex = noteNames.indexOf(transposeState.writtenNote);
+    const writtenSemitones = (transposeState.writtenOctave * 12) + noteIndex;
+    const concertSemitones = writtenSemitones + clef.transpose;
     const concertOctave = Math.floor(concertSemitones / 12);
-    const concertNote = noteNames[(concertSemitones % 12 + 12) % 12];
+    const concertNoteIndex = ((concertSemitones % 12) + 12) % 12;
+    const concertNote = noteNames[concertNoteIndex];
 
-    // Draw written pitch staff
-    const writtenClef = document.getElementById('written-clef');
-    const writtenNoteGroup = document.getElementById('written-note');
-    drawClef(writtenClef, instrument);
-    drawNote(writtenNoteGroup, note, octave);
+    // Find Y position for concert note
+    const concertPos = notePositions.find(p => p.note === concertNote && p.octave === concertOctave);
+    const concertY = concertPos ? concertPos.y : 80;
 
-    // Draw concert pitch staff (always treble)
-    const concertClef = document.getElementById('concert-clef');
-    const concertNoteGroup = document.getElementById('concert-note');
-    drawClef(concertClef, 'treble');
-    drawNote(concertNoteGroup, concertNote, concertOctave);
+    drawWholeNote(concertNoteGroup, concertY, 200);
 
-    // Update info text
-    if (transposeInfo) {
-        transposeInfo.textContent = instrument === 'C' ? 'Same pitch' : `Sounds: ${concertNote}${concertOctave}`;
+    if (transposeResult) {
+        if (clef.transpose === 0) {
+            transposeResult.textContent = `Same pitch: ${concertNote}${concertOctave}`;
+        } else {
+            transposeResult.textContent = `Sounds: ${concertNote}${concertOctave}`;
+        }
     }
 }
 
 // Event listeners
-if (instrumentSelect && noteInput && octaveInput) {
-    instrumentSelect.addEventListener('change', calculateTranspose);
-    noteInput.addEventListener('change', calculateTranspose);
-    octaveInput.addEventListener('change', calculateTranspose);
-    setTimeout(calculateTranspose, 100); // Initial render
+if (writtenClefGroup) {
+    writtenClefGroup.addEventListener('click', cycleClef);
+    writtenClefGroup.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        cycleClef();
+    });
+}
+
+if (writtenTouchArea) {
+    writtenTouchArea.addEventListener('click', placeNote);
+    writtenTouchArea.addEventListener('touchstart', placeNote);
 }
 
 // ============ INITIALIZATION ============
