@@ -459,21 +459,21 @@ const clefs = [
 // Note names
 const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-// Y positions for notes on staff (middle C = 80, staff lines at 40,60,80,100,120)
+// Y positions for notes on treble staff (staff lines at 40,60,80,100,120)
 const notePositions = [
-    { y: 130, note: 'B', octave: 2 }, // Below staff
-    { y: 120, note: 'C', octave: 3 },
-    { y: 110, note: 'D', octave: 3 },
-    { y: 100, note: 'E', octave: 3 },
-    { y: 90, note: 'F', octave: 3 },
-    { y: 80, note: 'G', octave: 3 },  // Middle line
-    { y: 70, note: 'A', octave: 3 },
-    { y: 60, note: 'B', octave: 3 },
-    { y: 50, note: 'C', octave: 4 },
-    { y: 40, note: 'D', octave: 4 },
-    { y: 30, note: 'E', octave: 4 },  // Above staff
-    { y: 20, note: 'F', octave: 4 },
-    { y: 10, note: 'G', octave: 4 }
+    { y: 140, note: 'C', octave: 4 }, // Below staff (middle C)
+    { y: 130, note: 'D', octave: 4 }, // Below staff
+    { y: 120, note: 'E', octave: 4 }, // Bottom line
+    { y: 110, note: 'F', octave: 4 }, // Space
+    { y: 100, note: 'G', octave: 4 }, // Line
+    { y: 90, note: 'A', octave: 4 },  // Space
+    { y: 80, note: 'B', octave: 4 },  // Middle line
+    { y: 70, note: 'C', octave: 5 },  // Space
+    { y: 60, note: 'D', octave: 5 },  // Line
+    { y: 50, note: 'E', octave: 5 },  // Space
+    { y: 40, note: 'F', octave: 5 },  // Top line
+    { y: 30, note: 'G', octave: 5 },  // Above staff
+    { y: 20, note: 'A', octave: 5 }   // Above staff
 ];
 
 // Cycle through clefs
