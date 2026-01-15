@@ -448,12 +448,12 @@ const transposeState = {
 
 // Clef configurations
 const clefs = [
-    { name: 'treble', symbol: '𝄞', label: 'Treble Clef', transpose: 0, instrumentLabel: 'Concert Pitch (C)' },
-    { name: 'Bb', symbol: '𝄞', label: 'B♭ Treble', transpose: -2, instrumentLabel: 'B♭ (Cl, Tpt, Ten Sax)' },
-    { name: 'Eb', symbol: '𝄞', label: 'E♭ Treble', transpose: -9, instrumentLabel: 'E♭ (Alto Sax)' },
-    { name: 'F', symbol: '𝄞', label: 'F Treble', transpose: -7, instrumentLabel: 'F (Horn)' },
-    { name: 'bass', symbol: '𝄢', label: 'Bass Clef', transpose: -12, instrumentLabel: 'Bass Clef' },
-    { name: 'alto', symbol: '𝄡', label: 'Alto Clef', transpose: 0, instrumentLabel: 'Alto Clef' }
+    { name: 'treble', symbol: '𝄞', label: 'Treble Clef', transpose: 0, instrumentLabel: 'Concert Pitch (C)', y: 80, fontSize: 100 },
+    { name: 'Bb', symbol: '𝄞', label: 'B♭ Treble', transpose: -2, instrumentLabel: 'B♭ (Cl, Tpt, Ten Sax)', y: 80, fontSize: 100 },
+    { name: 'Eb', symbol: '𝄞', label: 'E♭ Treble', transpose: -9, instrumentLabel: 'E♭ (Alto Sax)', y: 80, fontSize: 100 },
+    { name: 'F', symbol: '𝄞', label: 'F Treble', transpose: -7, instrumentLabel: 'F (Horn)', y: 80, fontSize: 100 },
+    { name: 'bass', symbol: '𝄢', label: 'Bass Clef', transpose: -12, instrumentLabel: 'Bass Clef', y: 70, fontSize: 90 },
+    { name: 'alto', symbol: '𝄡', label: 'Alto Clef', transpose: 0, instrumentLabel: 'Alto Clef', y: 80, fontSize: 100 }
 ];
 
 // Note names
@@ -491,6 +491,8 @@ function updateClef() {
     const textElement = writtenClefGroup.querySelector('text');
     if (textElement) {
         textElement.textContent = clef.symbol;
+        textElement.setAttribute('y', clef.y);
+        textElement.setAttribute('font-size', clef.fontSize);
     }
     if (instrumentLabel) {
         instrumentLabel.textContent = clef.instrumentLabel;
@@ -606,6 +608,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize timer display
     updateTimerDisplay();
+
+    // Initialize transpose clef display
+    updateClef();
 
     // Register service worker for PWA
     if ('serviceWorker' in navigator) {
