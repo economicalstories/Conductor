@@ -576,7 +576,7 @@ header {
     border-color: var(--accent);
 }
 
-/* Transpose Tool - Staff Notation */
+/* Transpose Tool - Touch-First Design */
 .transpose-container {
     max-width: 100%;
     padding: 1rem;
@@ -584,101 +584,96 @@ header {
 
 .transpose-container h2 {
     font-size: 1.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-weight: 300;
     text-align: center;
     color: var(--accent);
 }
 
-.transpose-controls {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.control-group {
-    flex: 1;
-    min-width: 100px;
-}
-
-.control-group label {
-    display: block;
-    font-size: 0.75rem;
+.transpose-hint {
+    text-align: center;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
 }
 
-.select-control {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.select-control:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-}
-
-.staff-section {
+.staff-card {
     background: var(--card-bg);
     border: 2px solid var(--border);
     border-radius: 15px;
-    padding: 1.5rem 1rem;
+    padding: 1rem;
     margin-bottom: 1rem;
+    transition: all 0.3s ease;
 }
 
-.staff-section.concert {
+.staff-card.concert {
     border-color: var(--accent);
     background: rgba(212, 175, 55, 0.05);
 }
 
-.staff-title {
+.staff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.staff-header h3 {
     font-size: 1rem;
     font-weight: 400;
     color: var(--text-muted);
-    margin-bottom: 1rem;
-    text-align: center;
+    margin: 0;
 }
 
-.staff-section.concert .staff-title {
+.staff-card.concert .staff-header h3 {
     color: var(--accent);
+}
+
+.instrument-label {
+    font-size: 0.85rem;
+    color: var(--accent);
+    background: rgba(212, 175, 55, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 500;
 }
 
 .staff-svg {
     width: 100%;
     height: auto;
-    max-width: 400px;
-    margin: 0 auto;
     display: block;
+    touch-action: none;
+    user-select: none;
 }
 
-.transpose-indicator {
+.staff-svg.interactive {
+    cursor: crosshair;
+}
+
+.tappable-clef {
+    transition: transform 0.2s ease;
+}
+
+.tappable-clef:active {
+    transform: scale(0.95);
+}
+
+.transpose-arrow {
     text-align: center;
     padding: 1rem 0;
 }
 
-.arrow-down {
-    font-size: 2.5rem;
+.transpose-arrow .arrow {
+    font-size: 2rem;
     color: var(--accent);
     line-height: 1;
 }
 
-.indicator-text {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    font-style: italic;
+.transpose-result {
+    font-size: 0.95rem;
+    color: var(--text);
     margin-top: 0.5rem;
+    font-weight: 500;
 }
 
 /* Responsive - Mobile Optimizations */

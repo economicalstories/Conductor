@@ -208,91 +208,60 @@
             <section id="transpose" class="tab-content">
                 <div class="transpose-container">
                     <h2>Transposer</h2>
-
-                    <!-- Input controls -->
-                    <div class="transpose-controls">
-                        <div class="control-group">
-                            <label for="instrument-select">Instrument</label>
-                            <select id="instrument-select" class="select-control">
-                                <option value="C">Concert Pitch (C)</option>
-                                <option value="Bb">B♭ (Cl, Tpt, Ten Sax)</option>
-                                <option value="Eb">E♭ (Alto Sax, Bari Sax)</option>
-                                <option value="F">F (Horn)</option>
-                                <option value="A">A (Clarinet)</option>
-                                <option value="bass">Bass Clef</option>
-                                <option value="alto">Alto Clef</option>
-                            </select>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="note-input">Note</label>
-                            <select id="note-input" class="select-control">
-                                <option value="C">C</option>
-                                <option value="C#">C♯/D♭</option>
-                                <option value="D">D</option>
-                                <option value="D#">D♯/E♭</option>
-                                <option value="E">E</option>
-                                <option value="F">F</option>
-                                <option value="F#">F♯/G♭</option>
-                                <option value="G">G</option>
-                                <option value="G#">G♯/A♭</option>
-                                <option value="A">A</option>
-                                <option value="A#">A♯/B♭</option>
-                                <option value="B">B</option>
-                            </select>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="octave-input">Octave</label>
-                            <select id="octave-input" class="select-control">
-                                <option value="3">3</option>
-                                <option value="4" selected>4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select>
-                        </div>
-                    </div>
+                    <p class="transpose-hint">Tap clef to change • Tap staff to place note</p>
 
                     <!-- Written pitch staff -->
-                    <div class="staff-section">
-                        <h3 class="staff-title">Written Pitch</h3>
-                        <svg id="written-staff" class="staff-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <div class="staff-card">
+                        <div class="staff-header">
+                            <h3>Written Pitch</h3>
+                            <div class="instrument-label" id="instrument-label">Treble Clef</div>
+                        </div>
+                        <svg id="written-staff" class="staff-svg interactive" viewBox="0 0 400 160">
                             <!-- Staff lines -->
-                            <line x1="20" y1="60" x2="380" y2="60" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="80" x2="380" y2="80" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="100" x2="380" y2="100" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="120" x2="380" y2="120" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="140" x2="380" y2="140" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="40" y1="40" x2="360" y2="40" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="60" x2="360" y2="60" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="80" x2="360" y2="80" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="100" x2="360" y2="100" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="120" x2="360" y2="120" stroke="#d4af37" stroke-width="2"/>
 
-                            <!-- Clef (will be dynamically added) -->
-                            <g id="written-clef"></g>
+                            <!-- Clef (tappable) -->
+                            <g id="written-clef" class="tappable-clef" style="cursor: pointer;">
+                                <rect x="30" y="20" width="60" height="120" fill="transparent"/>
+                                <text x="60" y="100" font-size="80" fill="#d4af37" text-anchor="middle">𝄞</text>
+                            </g>
 
-                            <!-- Note head (will be dynamically positioned) -->
+                            <!-- Note (will be placed by touch) -->
                             <g id="written-note"></g>
+
+                            <!-- Invisible touch area for note placement -->
+                            <rect id="written-touch-area" x="100" y="0" width="260" height="160" fill="transparent" style="cursor: crosshair;"/>
                         </svg>
                     </div>
 
                     <!-- Arrow indicator -->
-                    <div class="transpose-indicator">
-                        <div class="arrow-down">↓</div>
-                        <p class="indicator-text" id="transpose-info">Sounds...</p>
+                    <div class="transpose-arrow">
+                        <div class="arrow">↓</div>
+                        <p class="transpose-result" id="transpose-result">Tap staff above to begin</p>
                     </div>
 
                     <!-- Concert pitch staff -->
-                    <div class="staff-section concert">
-                        <h3 class="staff-title">Concert Pitch (Treble Clef)</h3>
-                        <svg id="concert-staff" class="staff-svg" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                    <div class="staff-card concert">
+                        <div class="staff-header">
+                            <h3>Concert Pitch</h3>
+                            <div class="instrument-label">Always Treble</div>
+                        </div>
+                        <svg id="concert-staff" class="staff-svg" viewBox="0 0 400 160">
                             <!-- Staff lines -->
-                            <line x1="20" y1="60" x2="380" y2="60" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="80" x2="380" y2="80" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="100" x2="380" y2="100" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="120" x2="380" y2="120" stroke="#d4af37" stroke-width="1.5"/>
-                            <line x1="20" y1="140" x2="380" y2="140" stroke="#d4af37" stroke-width="1.5"/>
+                            <line x1="40" y1="40" x2="360" y2="40" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="60" x2="360" y2="60" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="80" x2="360" y2="80" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="100" x2="360" y2="100" stroke="#d4af37" stroke-width="2"/>
+                            <line x1="40" y1="120" x2="360" y2="120" stroke="#d4af37" stroke-width="2"/>
 
                             <!-- Treble clef -->
-                            <g id="concert-clef"></g>
+                            <text x="60" y="100" font-size="80" fill="#d4af37" text-anchor="middle">𝄞</text>
 
-                            <!-- Note head (will be dynamically positioned) -->
+                            <!-- Concert note -->
                             <g id="concert-note"></g>
                         </svg>
                     </div>
