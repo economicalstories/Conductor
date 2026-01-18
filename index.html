@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Your essential companion for conducting - metronome, tuner, and rehearsal tools">
-    <meta name="theme-color" content="#1a1a2e">
+    <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
     <title>Conductor's Companion</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
@@ -23,6 +23,9 @@
                 </div>
                 <p class="tagline">Your orchestral toolkit</p>
             </div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <span id="theme-icon">☀️</span>
+            </button>
         </header>
 
         <!-- Navigation Tabs -->
@@ -50,82 +53,89 @@
             <!-- Metronome Tab -->
             <section id="metronome" class="tab-content active">
                 <div class="metronome-container">
-                    <!-- Mobile-optimized layout: slider left, controls right -->
                     <div class="metronome-main">
-                        <!-- Vertical slider with tempo markings -->
-                        <div class="slider-column">
-                            <div class="tempo-scale">
-                                <div class="scale-mark" data-bpm="208" style="top: 0%">
-                                    <span class="mark-label">Prestissimo</span>
-                                    <span class="mark-bpm">208</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="184" style="top: 14.3%">
-                                    <span class="mark-label">Presto</span>
-                                    <span class="mark-bpm">184</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="168" style="top: 23.8%">
-                                    <span class="mark-label">Vivace</span>
-                                    <span class="mark-bpm">168</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="144" style="top: 38.1%">
-                                    <span class="mark-label">Allegro</span>
-                                    <span class="mark-bpm">144</span>
-                                </div>
-                                <div class="scale-mark active" data-bpm="120" style="top: 52.4%">
-                                    <span class="mark-label">Moderato</span>
-                                    <span class="mark-bpm">120</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="108" style="top: 59.5%">
-                                    <span class="mark-label">Andante</span>
-                                    <span class="mark-bpm">108</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="76" style="top: 78.6%">
-                                    <span class="mark-label">Adagio</span>
-                                    <span class="mark-bpm">76</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="60" style="top: 88.1%">
-                                    <span class="mark-label">Largo</span>
-                                    <span class="mark-bpm">60</span>
-                                </div>
-                                <div class="scale-mark" data-bpm="40" style="top: 100%">
-                                    <span class="mark-label">Grave</span>
-                                    <span class="mark-bpm">40</span>
+                        <!-- Italian Tempo Markings -->
+                        <div class="tempo-markings">
+                            <div class="tempo-mark" data-bpm="208">
+                                <span class="mark-label">Prestissimo</span>
+                                <span class="mark-bpm">208</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="184">
+                                <span class="mark-label">Presto</span>
+                                <span class="mark-bpm">184</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="168">
+                                <span class="mark-label">Vivace</span>
+                                <span class="mark-bpm">168</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="144">
+                                <span class="mark-label">Allegro</span>
+                                <span class="mark-bpm">144</span>
+                            </div>
+                            <div class="tempo-mark active" data-bpm="120">
+                                <span class="mark-label">Moderato</span>
+                                <span class="mark-bpm">120</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="108">
+                                <span class="mark-label">Andante</span>
+                                <span class="mark-bpm">108</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="76">
+                                <span class="mark-label">Adagio</span>
+                                <span class="mark-bpm">76</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="60">
+                                <span class="mark-label">Largo</span>
+                                <span class="mark-bpm">60</span>
+                            </div>
+                            <div class="tempo-mark" data-bpm="40">
+                                <span class="mark-label">Grave</span>
+                                <span class="mark-bpm">40</span>
+                            </div>
+                        </div>
+
+                        <!-- Metronome Visual (Center) -->
+                        <div class="metronome-visual">
+                            <div class="metronome-pyramid">
+                                <div class="pyramid-body"></div>
+                                <div class="pendulum-container" id="pendulum">
+                                    <div class="pendulum-rod"></div>
+                                    <div class="pendulum-weight"></div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="slider-track-container">
+                        <!-- Controls -->
+                        <div class="metronome-controls">
+                            <!-- BPM Display -->
+                            <div class="bpm-display">
+                                <div class="bpm-number" id="bpm-display">120</div>
+                                <div class="bpm-label">BPM</div>
+                            </div>
+
+                            <!-- BPM Slider -->
+                            <div class="bpm-slider-container">
+                                <div class="bpm-slider-label">Adjust Tempo</div>
                                 <input type="range"
                                        id="tempo-slider"
                                        min="40"
                                        max="208"
                                        value="120"
                                        step="1"
-                                       orient="vertical"
                                        aria-label="Tempo slider">
                             </div>
-                        </div>
 
-                        <!-- Controls column -->
-                        <div class="controls-column">
-                            <!-- Large BPM display -->
-                            <div class="bpm-display">
-                                <div class="bpm-number" id="bpm-display">120</div>
-                                <div class="bpm-label">BPM</div>
-                            </div>
-
-                            <!-- Time signature selector -->
+                            <!-- Time Signatures -->
                             <div class="time-sig-section">
-                                <div class="sig-grid">
-                                    <button class="sig-btn" data-beats="2">2/4</button>
-                                    <button class="sig-btn" data-beats="3">3/4</button>
-                                    <button class="sig-btn active" data-beats="4">4/4</button>
-                                    <button class="sig-btn" data-beats="5">5/4</button>
-                                    <button class="sig-btn" data-beats="6">6/8</button>
-                                    <button class="sig-btn" data-beats="7">7/8</button>
-                                </div>
+                                <button class="sig-btn" data-beats="2">2/4</button>
+                                <button class="sig-btn" data-beats="3">3/4</button>
+                                <button class="sig-btn active" data-beats="4">4/4</button>
+                                <button class="sig-btn" data-beats="5">5/4</button>
+                                <button class="sig-btn" data-beats="6">6/8</button>
+                                <button class="sig-btn" data-beats="7">7/8</button>
                             </div>
 
-                            <!-- Beat indicator -->
+                            <!-- Beat Indicator -->
                             <div class="beat-display">
                                 <div class="beat-dots" id="beat-dots">
                                     <div class="dot"></div>
@@ -135,7 +145,7 @@
                                 </div>
                             </div>
 
-                            <!-- Start/Stop button -->
+                            <!-- Start/Stop Button -->
                             <button class="control-btn" id="metronome-toggle">
                                 <span class="btn-text">Start</span>
                             </button>

@@ -1,31 +1,111 @@
+/* ============================================
+   CONDUCTOR'S COMPANION — DESIGN SYSTEM
+   Professional metronome & orchestral toolkit
+   ============================================ */
+
+/* ==================== COLOR THEMES ==================== */
+
+/* Dark Mode (Default) */
 :root {
-    --primary: #1a1a2e;
-    --secondary: #16213e;
-    --accent: #d4af37;
-    --accent-hover: #f0c654;
-    --text: #ffffff;
-    --text-muted: #b8b8b8;
-    --bg: #0f0f1e;
-    --card-bg: #1f1f3a;
-    --border: rgba(212, 175, 55, 0.2);
-    --success: #4caf50;
-    --error: #f44336;
-    --shadow: rgba(0, 0, 0, 0.3);
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #14141a;
+    --bg-tertiary: #1c1c24;
+
+    --text-primary: #f5f5f7;
+    --text-secondary: #98989d;
+    --text-tertiary: #6e6e73;
+
+    --accent-gold: #d4af37;
+    --accent-hover: #e8c65a;
+    --accent-muted: rgba(212, 175, 55, 0.15);
+
+    --surface-elevated: rgba(255, 255, 255, 0.05);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --shadow-depth: rgba(0, 0, 0, 0.4);
+
+    --success: #30d158;
+    --warning: #ff9f0a;
+    --error: #ff453a;
+
+    /* Metronome specific */
+    --wood-dark: #2a1810;
+    --wood-light: #4a3020;
+    --metal: linear-gradient(135deg, #8a8a8a, #c0c0c0, #8a8a8a);
 }
 
-* {
+/* Light Mode */
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --bg-tertiary: #e8e8ed;
+
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #98989d;
+
+    --accent-gold: #b8940f;
+    --accent-hover: #9a7d0c;
+    --accent-muted: rgba(184, 148, 15, 0.12);
+
+    --surface-elevated: rgba(0, 0, 0, 0.03);
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --shadow-depth: rgba(0, 0, 0, 0.15);
+
+    /* Metronome specific */
+    --wood-dark: #6b3410;
+    --wood-light: #8b4a1a;
+}
+
+/* ==================== RESET & BASE ==================== */
+
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, var(--bg) 0%, var(--primary) 100%);
-    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+                 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--text-primary);
     min-height: 100vh;
     line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+::selection {
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+
+h1 {
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+/* ==================== LAYOUT ==================== */
 
 .app-container {
     max-width: 800px;
@@ -35,12 +115,15 @@ body {
     flex-direction: column;
 }
 
-/* Header */
+/* ==================== HEADER ==================== */
+
 header {
-    background: var(--secondary);
-    padding: 1.5rem 1rem;
-    border-bottom: 2px solid var(--accent);
-    box-shadow: 0 4px 20px var(--shadow);
+    background: var(--bg-secondary);
+    padding: 24px 16px;
+    border-bottom: 2px solid var(--accent-gold);
+    box-shadow: 0 4px 20px var(--shadow-depth);
+    position: relative;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-content {
@@ -51,78 +134,110 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 
 .logo svg {
-    color: var(--accent);
+    color: var(--accent-gold);
+    transition: color 0.3s ease;
 }
 
 .logo h1 {
-    font-size: 1.75rem;
+    font-size: 28px;
     font-weight: 300;
     letter-spacing: 1px;
 }
 
 .tagline {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-size: 14px;
     font-style: italic;
 }
 
-/* Navigation */
+/* Theme Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 24px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--accent-gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:hover {
+    background: var(--bg-tertiary);
+    transform: scale(1.05);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+/* ==================== NAVIGATION ==================== */
+
 .tab-nav {
     display: flex;
-    background: var(--primary);
+    background: var(--bg-secondary);
     overflow-x: auto;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 10;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .tab-btn {
     flex: 1;
     min-width: 80px;
-    padding: 1rem 0.5rem;
+    padding: 16px 8px;
     background: transparent;
     border: none;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.85rem;
+    font-size: 14px;
     border-bottom: 3px solid transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: 4px;
 }
 
 .tab-icon {
-    font-size: 1.2rem;
+    font-size: 20px;
 }
 
 .tab-btn:hover {
-    background: rgba(212, 175, 55, 0.1);
-    color: var(--text);
+    background: var(--accent-muted);
+    color: var(--text-primary);
 }
 
 .tab-btn.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-    background: rgba(212, 175, 55, 0.05);
+    color: var(--accent-gold);
+    border-bottom-color: var(--accent-gold);
+    background: var(--accent-muted);
 }
 
-/* Content */
+/* ==================== MAIN CONTENT ==================== */
+
 .content {
     flex: 1;
-    padding: 2rem 1rem;
+    padding: 32px 16px;
 }
 
 .tab-content {
     display: none;
-    animation: fadeIn 0.3s ease;
+    animation: fadeIn 0.3s cubic-bezier(0, 0, 0.2, 1);
 }
 
 .tab-content.active {
@@ -130,95 +245,283 @@ header {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Metronome - Mobile First */
+/* ==================== MECHANICAL METRONOME ==================== */
+
 .metronome-container {
     max-width: 100%;
-    padding: 0.5rem;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 250px);
+    min-height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .metronome-main {
-    display: flex;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
     width: 100%;
-    max-width: 600px;
-    height: 100%;
-    max-height: 500px;
+    max-width: 700px;
+    align-items: center;
 }
 
-.slider-column {
-    display: flex;
-    gap: 0.75rem;
-    align-items: stretch;
-}
-
-.tempo-scale {
+/* Italian Tempo Markings (Left Side) */
+.tempo-markings {
     position: relative;
     height: 400px;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.scale-mark {
-    position: absolute;
+.tempo-mark {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    padding: 8px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.tempo-mark:hover {
+    background: var(--accent-muted);
+}
+
+.tempo-mark.active {
+    background: var(--accent-muted);
+}
+
+.tempo-mark.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
     transform: translateY(-50%);
-    right: 0;
-}
-
-.scale-mark:hover {
-    background: rgba(212, 175, 55, 0.1);
-}
-
-.scale-mark.active {
-    background: rgba(212, 175, 55, 0.2);
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 8px solid var(--accent-gold);
 }
 
 .mark-label {
-    font-size: 0.7rem;
-    color: var(--text-muted);
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-secondary);
     white-space: nowrap;
+    font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', serif;
+    transition: color 0.2s ease;
+}
+
+.tempo-mark.active .mark-label {
+    color: var(--accent-gold);
 }
 
 .mark-bpm {
-    font-size: 0.65rem;
-    color: var(--accent);
-    opacity: 0.7;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+    transition: color 0.2s ease;
 }
 
-.slider-track-container {
-    width: 60px;
+.tempo-mark.active .mark-bpm {
+    color: var(--accent-gold);
+}
+
+/* Metronome Pyramid & Pendulum */
+.metronome-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Pyramid Housing */
+.metronome-pyramid {
+    position: relative;
+    width: 200px;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    border-radius: 30px;
-    padding: 0.5rem;
-    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.pyramid-body {
+    width: 180px;
+    height: 380px;
+    background: linear-gradient(135deg, var(--wood-dark) 0%, var(--wood-light) 50%, var(--wood-dark) 100%);
+    clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+    border: 2px solid var(--accent-gold);
+    border-radius: 4px;
+    box-shadow: 0 8px 32px var(--shadow-depth),
+                inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Wood grain texture */
+.pyramid-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.1) 3px,
+        rgba(0, 0, 0, 0.1) 4px
+    );
+    opacity: 0.3;
+}
+
+/* Gold trim */
+.pyramid-body::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(to top, var(--accent-gold), transparent);
+    opacity: 0.3;
+}
+
+/* Pendulum Assembly */
+.pendulum-container {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 320px;
+    transform-origin: top center;
+}
+
+.pendulum-rod {
+    width: 2px;
+    height: 280px;
+    background: var(--metal);
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pendulum-weight {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6),
+                0 4px 12px var(--shadow-depth);
+    border: 3px solid var(--bg-secondary);
+    transition: all 0.2s ease;
+}
+
+/* Pendulum swing animation */
+@keyframes pendulumSwing {
+    0%, 100% {
+        transform: translateX(-50%) rotate(-15deg);
+    }
+    50% {
+        transform: translateX(-50%) rotate(15deg);
+    }
+}
+
+.pendulum-container.playing {
+    animation: pendulumSwing linear infinite;
+}
+
+/* Controls Column */
+.metronome-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* BPM Display */
+.bpm-display {
+    text-align: center;
+    padding: 32px 24px;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 0 30px var(--accent-muted),
+                0 8px 24px var(--shadow-depth);
+    transition: all 0.3s ease;
+}
+
+.bpm-number {
+    font-size: 72px;
+    font-weight: 400;
+    color: var(--accent-gold);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+.bpm-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* BPM Slider */
+.bpm-slider-container {
+    padding: 16px;
+    background: var(--surface-elevated);
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+}
+
+.bpm-slider-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.bpm-slider-track {
+    position: relative;
+    height: 8px;
+    background: linear-gradient(to right,
+                var(--accent-muted) 0%,
+                var(--accent-gold) 50%,
+                var(--accent-muted) 100%);
+    border-radius: 4px;
 }
 
 #tempo-slider {
-    -webkit-appearance: slider-vertical;
-    writing-mode: bt-lr;
-    width: 12px;
-    height: 400px;
-    background: linear-gradient(180deg,
-        var(--accent) 0%,
-        rgba(212, 175, 55, 0.3) 100%);
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right,
+                var(--accent-muted) 0%,
+                var(--accent-gold) 50%,
+                var(--accent-muted) 100%);
+    border-radius: 4px;
     outline: none;
-    border-radius: 6px;
     cursor: grab;
 }
 
@@ -229,137 +532,126 @@ header {
 #tempo-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 40px;
-    height: 40px;
-    background: var(--accent);
-    cursor: grab;
+    width: 32px;
+    height: 32px;
+    background: var(--accent-gold);
     border-radius: 50%;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-    border: 4px solid var(--primary);
+    cursor: grab;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6),
+                0 4px 12px var(--shadow-depth);
+    border: 4px solid var(--bg-primary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#tempo-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+#tempo-slider:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    transform: scale(0.95);
 }
 
 #tempo-slider::-moz-range-thumb {
-    width: 40px;
-    height: 40px;
-    background: var(--accent);
-    cursor: grab;
+    width: 32px;
+    height: 32px;
+    background: var(--accent-gold);
     border-radius: 50%;
-    border: 4px solid var(--primary);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+    cursor: grab;
+    border: 4px solid var(--bg-primary);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6),
+                0 4px 12px var(--shadow-depth);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.controls-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    justify-content: center;
+#tempo-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
 }
 
-.bpm-display {
-    text-align: center;
-    padding: 1.5rem;
-    background: var(--card-bg);
-    border-radius: 15px;
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
-}
-
-.bpm-number {
-    font-size: 4.5rem;
-    font-weight: 200;
-    color: var(--accent);
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-}
-
-.bpm-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-top: 0.5rem;
-    letter-spacing: 2px;
-}
-
+/* Time Signatures */
 .time-sig-section {
-    margin: 0;
-}
-
-.sig-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .sig-btn {
-    padding: 0.75rem 0.5rem;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    color: var(--text);
-    border-radius: 8px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-subtle);
+    color: var(--text-primary);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 16px;
     font-weight: 600;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sig-btn:hover {
-    border-color: var(--accent);
+    border-color: var(--accent-gold);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-depth);
 }
 
 .sig-btn.active {
-    background: var(--accent);
-    color: var(--primary);
-    border-color: var(--accent);
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+    border-color: var(--accent-gold);
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
 }
 
+/* Beat Indicator */
 .beat-display {
-    padding: 1rem 0;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
 }
 
 .beat-dots {
     display: flex;
-    gap: 0.75rem;
-    justify-content: center;
+    gap: 12px;
 }
 
 .dot {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    transition: all 0.15s ease;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-subtle);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dot.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.6);
     transform: scale(1.3);
 }
 
 .dot.strong {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-    transform: scale(1.4);
+    box-shadow: 0 0 20px rgba(232, 198, 90, 0.8);
+    transform: scale(1.5);
 }
 
-/* Control Button */
+/* Primary Control Button */
 .control-btn {
     width: 100%;
-    padding: 1.25rem;
-    background: var(--accent);
-    color: var(--primary);
+    padding: 20px 32px;
+    background: var(--accent-gold);
+    color: var(--bg-primary);
     border: none;
-    border-radius: 50px;
-    font-size: 1.25rem;
+    border-radius: 28px;
+    font-size: 17px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -371,7 +663,7 @@ header {
 }
 
 .control-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
 }
 
 .control-btn.active {
@@ -379,16 +671,19 @@ header {
 }
 
 .control-btn.secondary {
-    background: var(--card-bg);
-    color: var(--text);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     box-shadow: none;
+    border: 2px solid var(--border-subtle);
 }
 
 .control-btn.secondary:hover {
-    background: var(--secondary);
+    background: var(--bg-tertiary);
+    border-color: var(--accent-gold);
 }
 
-/* Tuner */
+/* ==================== TUNER ==================== */
+
 .tuner-container {
     max-width: 500px;
     margin: 0 auto;
@@ -396,13 +691,14 @@ header {
 }
 
 .tuner-visual {
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
     display: flex;
     justify-content: center;
 }
 
 .tuning-fork {
-    color: var(--accent);
+    color: var(--accent-gold);
+    transition: color 0.3s ease;
 }
 
 .tuner-pulse {
@@ -410,56 +706,86 @@ header {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.05); }
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+
+.tuning-fork.playing .tuner-pulse {
+    animation: pulsePlaying 0.5s ease-in-out infinite;
+}
+
+@keyframes pulsePlaying {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
 }
 
 .tuner-info h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 32px;
+    margin-bottom: 16px;
     font-weight: 300;
 }
 
 .frequency-display {
-    font-size: 3rem;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
+    font-size: 48px;
+    color: var(--accent-gold);
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
 }
 
 .frequency-unit {
-    font-size: 1.5rem;
-    color: var(--text-muted);
+    font-size: 24px;
+    color: var(--text-secondary);
 }
 
 .tuner-description {
-    color: var(--text-muted);
+    color: var(--text-secondary);
     font-style: italic;
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 }
 
 .frequency-adjust {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 16px;
+    margin-bottom: 32px;
 }
 
 .freq-btn {
-    width: 50px;
-    height: 50px;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    color: var(--accent);
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-subtle);
+    color: var(--accent-gold);
     border-radius: 50%;
-    font-size: 1.5rem;
+    font-size: 24px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .freq-btn:hover {
-    background: var(--accent);
-    color: var(--primary);
-    border-color: var(--accent);
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+    border-color: var(--accent-gold);
+    transform: scale(1.05);
+}
+
+.freq-btn:active {
+    transform: scale(0.95);
 }
 
 #frequency-slider {
@@ -467,7 +793,7 @@ header {
     height: 6px;
     -webkit-appearance: none;
     appearance: none;
-    background: var(--card-bg);
+    background: var(--bg-tertiary);
     outline: none;
     border-radius: 3px;
 }
@@ -477,48 +803,64 @@ header {
     appearance: none;
     width: 24px;
     height: 24px;
-    background: var(--accent);
+    background: var(--accent-gold);
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
+    transition: all 0.2s ease;
+}
+
+#frequency-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
 }
 
 #frequency-slider::-moz-range-thumb {
     width: 24px;
     height: 24px;
-    background: var(--accent);
+    background: var(--accent-gold);
     cursor: pointer;
     border-radius: 50%;
     border: none;
     box-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
+    transition: all 0.2s ease;
+}
+
+#frequency-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
 }
 
 .tuner-presets {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+    gap: 8px;
+    margin-bottom: 32px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 .tuner-preset-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
+    padding: 12px 24px;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
     border-radius: 20px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
 }
 
 .tuner-preset-btn:hover {
-    background: var(--accent);
-    color: var(--primary);
-    border-color: var(--accent);
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+    border-color: var(--accent-gold);
+    transform: scale(1.05);
 }
 
-/* Timer */
+.tuner-preset-btn:active {
+    transform: scale(0.96);
+}
+
+/* ==================== TIMER ==================== */
+
 .timer-container {
     max-width: 500px;
     margin: 0 auto;
@@ -526,115 +868,122 @@ header {
 }
 
 .timer-container h2 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 32px;
+    margin-bottom: 32px;
     font-weight: 300;
 }
 
 .timer-display {
-    font-size: 6rem;
+    font-size: 96px;
     font-weight: 300;
-    color: var(--accent);
-    margin-bottom: 2rem;
+    color: var(--accent-gold);
+    margin-bottom: 32px;
     font-variant-numeric: tabular-nums;
-    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 30px var(--accent-muted);
+    letter-spacing: -0.02em;
 }
 
 .timer-controls {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 3rem;
+    gap: 16px;
+    margin-bottom: 48px;
 }
 
 .timer-presets h3 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: 20px;
+    margin-bottom: 16px;
     font-weight: 300;
-    color: var(--text-muted);
+    color: var(--text-secondary);
 }
 
 .preset-timers {
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 .timer-preset-btn {
-    padding: 0.75rem 1.5rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text);
+    padding: 12px 24px;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
     border-radius: 20px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 16px;
 }
 
 .timer-preset-btn:hover {
-    background: var(--accent);
-    color: var(--primary);
-    border-color: var(--accent);
+    background: var(--accent-gold);
+    color: var(--bg-primary);
+    border-color: var(--accent-gold);
+    transform: scale(1.05);
 }
 
-/* Transpose Tool - Touch-First Design */
+.timer-preset-btn:active {
+    transform: scale(0.96);
+}
+
+/* ==================== TRANSPOSE TOOL ==================== */
+
 .transpose-container {
     max-width: 100%;
-    padding: 1rem;
+    padding: 16px;
 }
 
 .transpose-container h2 {
-    font-size: 1.75rem;
-    margin-bottom: 0.5rem;
+    font-size: 28px;
+    margin-bottom: 8px;
     font-weight: 300;
     text-align: center;
-    color: var(--accent);
+    color: var(--accent-gold);
 }
 
 .transpose-hint {
     text-align: center;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
 }
 
 .staff-card {
-    background: var(--card-bg);
-    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-subtle);
     border-radius: 15px;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    padding: 16px;
+    margin-bottom: 16px;
     transition: all 0.3s ease;
 }
 
 .staff-card.concert {
-    border-color: var(--accent);
-    background: rgba(212, 175, 55, 0.05);
+    border-color: var(--accent-gold);
+    background: var(--accent-muted);
 }
 
 .staff-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
 }
 
 .staff-header h3 {
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 400;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin: 0;
 }
 
 .staff-card.concert .staff-header h3 {
-    color: var(--accent);
+    color: var(--accent-gold);
 }
 
 .instrument-label {
-    font-size: 0.85rem;
-    color: var(--accent);
-    background: rgba(212, 175, 55, 0.1);
-    padding: 0.25rem 0.75rem;
+    font-size: 14px;
+    color: var(--accent-gold);
+    background: var(--accent-muted);
+    padding: 4px 12px;
     border-radius: 12px;
     font-weight: 500;
 }
@@ -661,87 +1010,137 @@ header {
 
 .transpose-arrow {
     text-align: center;
-    padding: 1rem 0;
+    padding: 16px 0;
 }
 
 .transpose-arrow .arrow {
-    font-size: 2rem;
-    color: var(--accent);
+    font-size: 32px;
+    color: var(--accent-gold);
     line-height: 1;
 }
 
 .transpose-result {
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-top: 0.5rem;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-top: 8px;
     font-weight: 500;
 }
 
-/* Responsive - Mobile Optimizations */
-@media (max-width: 600px) {
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 767px) {
+    .metronome-main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 24px;
+    }
+
+    .tempo-markings {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .tempo-mark {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .tempo-mark.active::before {
+        display: none;
+    }
+
+    .metronome-pyramid {
+        width: 160px;
+        height: 320px;
+    }
+
+    .pyramid-body {
+        width: 140px;
+        height: 300px;
+    }
+
+    .pendulum-container {
+        height: 260px;
+    }
+
+    .pendulum-rod {
+        height: 220px;
+    }
+
     .bpm-number {
-        font-size: 3.5rem;
+        font-size: 56px;
     }
 
     .timer-display {
-        font-size: 3.5rem;
+        font-size: 56px;
     }
 
-    .tab-btn {
-        font-size: 0.7rem;
-        padding: 0.75rem 0.5rem;
-    }
-
-    .metronome-container {
-        height: calc(100vh - 180px);
-    }
-
-    .tempo-scale {
-        height: 350px;
-    }
-
-    .slider-track-container {
-        width: 50px;
-    }
-
-    #tempo-slider {
-        height: 350px;
-    }
-
-    .mark-label {
-        font-size: 0.65rem;
-    }
-
-    .mark-bpm {
-        font-size: 0.6rem;
-    }
-
-    .sig-grid {
+    .time-sig-section {
         grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    .staff-svg {
-        max-width: 100%;
+@media (max-width: 480px) {
+    header {
+        padding: 16px;
+    }
+
+    .logo h1 {
+        font-size: 20px;
+    }
+
+    .content {
+        padding: 24px 12px;
+    }
+
+    .bpm-number {
+        font-size: 48px;
+    }
+
+    .timer-display {
+        font-size: 48px;
     }
 }
 
-/* Playing state animations */
-.tuning-fork.playing .tuner-pulse {
-    animation: pulsePlaying 0.5s ease-in-out infinite;
+/* ==================== ACCESSIBILITY ==================== */
+
+/* Focus states */
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--accent-gold);
+    outline-offset: 2px;
 }
 
-@keyframes pulsePlaying {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .pendulum-container.playing {
+        animation: none;
+    }
 }
 
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
+/* ==================== UTILITIES ==================== */
 
-/* Selection */
-::selection {
-    background: var(--accent);
-    color: var(--primary);
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }

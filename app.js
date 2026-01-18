@@ -6,6 +6,7 @@ let timerInterval = null;
 
 // State
 const state = {
+    theme: 'dark', // Track current theme
     metronome: {
         bpm: 120,
         isPlaying: false,
@@ -31,6 +32,52 @@ function initAudioContext() {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
     return audioContext;
+}
+
+// ============ THEME SWITCHING ============
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const html = document.documentElement;
+
+// Load saved theme from localStorage
+function loadTheme() {
+    const savedTheme = localStorage.getItem('conductor-theme') || 'dark';
+    state.theme = savedTheme;
+    applyTheme(savedTheme);
+}
+
+// Apply theme
+function applyTheme(theme) {
+    const themeColorMeta = document.getElementById('theme-color-meta');
+
+    if (theme === 'light') {
+        html.setAttribute('data-theme', 'light');
+        themeIcon.textContent = '🌙';
+        state.theme = 'light';
+        if (themeColorMeta) themeColorMeta.setAttribute('content', '#ffffff');
+    } else {
+        html.removeAttribute('data-theme');
+        themeIcon.textContent = '☀️';
+        state.theme = 'dark';
+        if (themeColorMeta) themeColorMeta.setAttribute('content', '#0a0a0f');
+    }
+}
+
+// Toggle theme
+function toggleTheme() {
+    const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('conductor-theme', newTheme);
+
+    // Rotate icon animation
+    themeToggle.style.transform = 'rotate(180deg)';
+    setTimeout(() => {
+        themeToggle.style.transform = 'rotate(0deg)';
+    }, 300);
+}
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
 }
 
 // ============ TAB NAVIGATION ============
@@ -62,20 +109,21 @@ tabButtons.forEach(button => {
 const tempoSlider = document.getElementById('tempo-slider');
 const bpmDisplay = document.getElementById('bpm-display');
 const metronomeToggle = document.getElementById('metronome-toggle');
-const scaleMarks = document.querySelectorAll('.scale-mark');
+const tempoMarks = document.querySelectorAll('.tempo-mark');
 const signatureButtons = document.querySelectorAll('.sig-btn');
 const beatDots = document.querySelectorAll('.dot');
+const pendulum = document.getElementById('pendulum');
 
-// Update BPM display and highlight scale marks
+// Update BPM display and highlight tempo marks
 function updateBPM(bpm) {
     state.metronome.bpm = bpm;
     bpmDisplay.textContent = bpm;
     tempoSlider.value = bpm;
 
-    // Highlight closest scale mark
+    // Highlight closest tempo mark
     let closestMark = null;
     let closestDiff = Infinity;
-    scaleMarks.forEach(mark => {
+    tempoMarks.forEach(mark => {
         const markBpm = parseInt(mark.dataset.bpm);
         const diff = Math.abs(markBpm - bpm);
         if (diff < closestDiff) {
@@ -84,9 +132,14 @@ function updateBPM(bpm) {
         }
     });
 
-    scaleMarks.forEach(mark => mark.classList.remove('active'));
+    tempoMarks.forEach(mark => mark.classList.remove('active'));
     if (closestMark && closestDiff < 20) {
         closestMark.classList.add('active');
+    }
+
+    // Update pendulum swing speed
+    if (state.metronome.isPlaying) {
+        updatePendulumSpeed();
     }
 
     // Restart metronome if playing
@@ -96,13 +149,21 @@ function updateBPM(bpm) {
     }
 }
 
+// Update pendulum animation speed based on BPM
+function updatePendulumSpeed() {
+    if (pendulum) {
+        const duration = (60 / state.metronome.bpm) * 1000; // ms per beat
+        pendulum.style.animationDuration = `${duration}ms`;
+    }
+}
+
 // Tempo slider
 tempoSlider.addEventListener('input', (e) => {
     updateBPM(parseInt(e.target.value));
 });
 
-// Scale mark buttons
-scaleMarks.forEach(mark => {
+// Tempo mark buttons
+tempoMarks.forEach(mark => {
     mark.addEventListener('click', () => {
         updateBPM(parseInt(mark.dataset.bpm));
     });
@@ -173,6 +234,12 @@ function startMetronome() {
 
     const interval = (60 / state.metronome.bpm) * 1000;
 
+    // Start pendulum animation
+    if (pendulum) {
+        pendulum.classList.add('playing');
+        updatePendulumSpeed();
+    }
+
     // Play first beat immediately
     metronomeTick();
 
@@ -189,6 +256,11 @@ function stopMetronome() {
     if (metronomeInterval) {
         clearInterval(metronomeInterval);
         metronomeInterval = null;
+    }
+
+    // Stop pendulum animation
+    if (pendulum) {
+        pendulum.classList.remove('playing');
     }
 
     // Clear visual indicators
@@ -603,6 +675,9 @@ if (writtenTouchArea) {
 
 // ============ INITIALIZATION ============
 document.addEventListener('DOMContentLoaded', () => {
+    // Load saved theme
+    loadTheme();
+
     // Initialize beat dots
     updateBeatDots();
 
